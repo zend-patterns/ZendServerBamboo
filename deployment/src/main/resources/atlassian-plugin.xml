@@ -1,0 +1,56 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="deployment"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="deployment-resources" name="deployment Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="deployment.css" location="/css/deployment.css"/>
+        <resource type="download" name="deployment.js" location="/js/deployment.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>deployment</context>
+    </web-resource>
+    
+    <!-- publish our component -->
+    <component key="ZendServerPluginComponent" class="org.zend.zendserver.plugins.ZendServerImpl" public="true">
+        <interface>org.zend.zendserver.plugins.ZendServer</interface>
+    </component>
+    
+    <!-- import from the product container -->
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+    
+    <taskType key="ZendServerPackagingTask" name="Zend Server Packaging Task" class="org.zend.zendserver.plugins.PackagingTask">
+  		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
+  		<resource type="download" name="icon" location="images/zend_logo.png"/>
+  		<configuration class="org.zend.zendserver.plugins.PackagingTaskConfigurator"/>
+      	<resource type="freemarker" name="edit" location="editPackagingTask.ftl"/>
+      	<resource type="freemarker" name="view" location="viewPackagingTask.ftl"/>
+	</taskType>
+	
+    <taskType key="ZendServerDeploymentTask" name="Zend Server Deployment Task" class="org.zend.zendserver.plugins.DeploymentTask">
+  		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
+  		<resource type="download" name="icon" location="images/zend_logo.png"/>
+  		<configuration class="org.zend.zendserver.plugins.DeploymentTaskConfigurator"/>
+      	<resource type="freemarker" name="edit" location="editDeploymentTask.ftl"/>
+      	<resource type="freemarker" name="view" location="viewDeploymentTask.ftl"/>
+	</taskType>
+	
+    <taskType key="ZendServerDeploymentCheckTask" name="Zend Server Deployment Check Task" class="org.zend.zendserver.plugins.DeploymentCheckTask">
+  		<description>Checks whether deployment was executed successfully</description>
+  		<resource type="download" name="icon" location="images/zend_logo.png"/>
+  		<configuration class="org.zend.zendserver.plugins.DeploymentCheckTaskConfigurator"/>
+  		<resource type="freemarker" name="edit" location="editDeploymentCheckTask.ftl"/>
+      	<resource type="freemarker" name="view" location="viewDeploymentCheckTask.ftl"/>
+	</taskType>
+
+</atlassian-plugin>
