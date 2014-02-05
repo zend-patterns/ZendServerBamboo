@@ -39,20 +39,8 @@ public class DeploymentCheckTask implements TaskType {
 		String deployResultFilename = getDeployResultFilename(taskContext, buildLogger);
 		String applicationId = getApplicationIdByDeployResult(deployResultFilename, buildLogger);
 		
-		ProcessBuilder pb;
-        String placeholder = "%s applicationGetDetails --application=%s --zsurl=%s --zskey=%s --zssecret=%s --zsversion=%s > %s";
-        String cmd = String.format(placeholder,
-        		taskContext.getConfigurationMap().get("zs_client_location"),
-        		applicationId,
-        		taskContext.getConfigurationMap().get("url"),
-        		taskContext.getConfigurationMap().get("api_key"),
-        		taskContext.getConfigurationMap().get("api_secret"),
-        		taskContext.getConfigurationMap().get("zsversion"),
-        		getApplicationGetDetailsFilePath(taskContext));
+		ZendServerSDKCall call = new ZendServerSDKCall(buildLogger);
         
-        buildLogger.addBuildLogEntry("Executed cmd: " +  cmd);
-        
-        Process process;
         int repeat = 5;
         int wait = 5;
         int it = 0;
@@ -64,9 +52,12 @@ public class DeploymentCheckTask implements TaskType {
         		if (it > 1) {
         			Thread.sleep(wait * 1000);
         		}
-        		pb = new ProcessBuilder("bash", "-c", cmd);
-        		process = pb.start();
-        		process.waitFor();
+        		call.execute(
+        				call.getApplicationGetDetailsCmd(
+        						taskContext.getConfigurationMap(), 
+        						applicationId, 
+        						getApplicationGetDetailsFilePath(taskContext)));
+        		
         	} catch (Exception e) {
         		buildLogger.addErrorLogEntry(e.getMessage());
         	}
@@ -86,22 +77,14 @@ public class DeploymentCheckTask implements TaskType {
         	try {
         		buildLogger.addErrorLogEntry("Deployment FAILED! Initializing ROLLBACK.");
         		
-        		String deploymentInfoLogFile = "result-info.xml";
-        		String deploymentInfoLogFilename = taskContext.getWorkingDirectory().getAbsolutePath() + "/" + deploymentInfoLogFile;
+        		String applicationRollbackFile = "result-info.xml";
+        		String applicationRollbackFilePath = taskContext.getWorkingDirectory().getAbsolutePath() + "/" + applicationRollbackFile;
         		
-        		placeholder = "%s applicationRollback --appId=%s --zsurl=%s --zskey=%s --zssecret=%s --zsversion=%s > %s";
-        		cmd = String.format(placeholder,
-        				taskContext.getConfigurationMap().get("zs_client_location"),
-        				applicationId,
-        				taskContext.getConfigurationMap().get("url"),
-        				taskContext.getConfigurationMap().get("api_key"),
-        				taskContext.getConfigurationMap().get("api_secret"),
-        				taskContext.getConfigurationMap().get("zsversion"),
-        				deploymentInfoLogFilename);
-        		pb = new ProcessBuilder("bash", "-c", cmd);
-        		process = pb.start();
-        		process.waitFor();
-        		buildLogger.addBuildLogEntry("Executed cmd: " +  cmd);
+        		call.execute(
+        				call.getApplicationRollbackCmd(
+        						taskContext.getConfigurationMap(), 
+        						applicationId, 
+        						applicationRollbackFilePath));
         	}
         	catch (Exception e) {
         		buildLogger.addBuildLogEntry("Exception: "+e.getMessage());
