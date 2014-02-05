@@ -23,9 +23,12 @@ import com.atlassian.bamboo.resultsummary.tests.TestState;
 import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.google.common.collect.Lists;
 
+////import org.zend.zendserver.plugins.*;
+
 public class DeploymentCheckReportCollector implements TestReportCollector {
 	private BuildLogger buildLogger;
 	private DeploymentCheckTask task;
+	private ResultParserDeploymentCheck parser;
 	
 	public DeploymentCheckReportCollector(DeploymentCheckTask task, BuildLogger buildLogger) {
 		this.buildLogger = buildLogger;
@@ -33,66 +36,26 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 	}
 	
 	public TestCollectionResult collect(File file) throws Exception {
+		buildLogger.addBuildLogEntry("...started.");
 		TestCollectionResultBuilder builder = new TestCollectionResultBuilder();
 		
 		Collection<TestResults> successfulTestResults = Lists.newArrayList();
         Collection<TestResults> failingTestResults = Lists.newArrayList();
 		
-        String deploymentLogFile = "/home/jan/workspaces/sandboxx/deployment/target/bamboo/home/xml-data/build-dir/TES-TEST-TEST/result.xml";
-		
         try {
+        	
+        	parser = new ResultParserDeploymentCheck(file.getAbsolutePath(), buildLogger);
+        	NodeList servers = parser.getNodeListServer();
 
-			File stocks = new File(deploymentLogFile);
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(stocks);
-			doc.getDocumentElement().normalize();
-
-			Element responseData = (Element) doc.getElementsByTagName("responseData").item(0);
-			buildLogger.addBuildLogEntry("+++ 001: " + responseData.getNodeName()); 
-			//Element responseDataElement = (Element) responseData;
-			Element applicationDetails = (Element) responseData.getElementsByTagName("applicationDetails").item(0);
-			buildLogger.addBuildLogEntry("+++ 002: " + applicationDetails.getNodeName());
-			Element applicationInfo = (Element) applicationDetails.getElementsByTagName("applicationInfo").item(0);
-			buildLogger.addBuildLogEntry("+++ 003: " + applicationInfo.getNodeName());
-
-			//Element responseDataElement = (Element) responseData;
-			//String status = getValue("status", responseDataElement);
-			//String appName = getValue("appName", responseDataElement);
-			//buildLogger.addBuildLogEntry("+++ appName: " + getValue("appName", responseDataElement));
-			//buildLogger.addBuildLogEntry("+++ Status: " + getValue("status", responseDataElement)); 
-
-			
-			
-			NodeList servers = applicationInfo.getElementsByTagName("servers").item(0).getChildNodes();
-			buildLogger.addBuildLogEntry("+++ server-length: " + servers.getLength()); 
-			
+        	buildLogger.addBuildLogEntry("Checking " + String.valueOf((servers.getLength() - 1)) + " servers for correct deployment");
 			for (int i = 0; i < servers.getLength() - 1; i++) {
 				
-				Element node = (Element) servers.item(i);
-				buildLogger.addBuildLogEntry("01: " + node.getNodeName());
-
-				buildLogger.addErrorLogEntry("&&& " + getValue(node, "deployedVersion"));
-				buildLogger.addErrorLogEntry("&&& " + getElement(node, "deployedVersion").getNodeName());
-				buildLogger.addErrorLogEntry("&&& " + getTestSuccessDescription(node));
-				buildLogger.addErrorLogEntry("&&& " + getTestErrorDescription(applicationInfo, node));
+				Element serverInfo = (Element) servers.item(i);
+				String id = parser.getValue(serverInfo, "id");
+				String status = parser.getValue(serverInfo, "status");
 				
-				//Element applicationServer = getElement("applicationServer", node);
-				String id = node.getElementsByTagName("id").item(0).getChildNodes().item(0).getNodeValue();
-				buildLogger.addBuildLogEntry("02: " + id);
-
-				String deployedVersion = node.getElementsByTagName("deployedVersion").item(0).getChildNodes().item(0).getNodeValue();
-				//String deployedVersion = getValue("deployedVersion", applicationServer);
-				buildLogger.addBuildLogEntry("04: " + deployedVersion);
-				//String status = getValue("status", applicationServer);
-				String status = node.getElementsByTagName("status").item(0).getChildNodes().item(0).getNodeValue();
-				buildLogger.addBuildLogEntry("05: " + status);
-				
-				buildLogger.addBuildLogEntry("+++ id: " + id);
-				buildLogger.addBuildLogEntry("+++ deployedVersion: " + deployedVersion);
-				buildLogger.addBuildLogEntry("+++ status: " + status);
-				
-				TestResults testResults = new TestResults(id, getTestErrorDescription(applicationInfo, node), "");
+				buildLogger.addBuildLogEntry("Server " + id + " has status " + status);
+				TestResults testResults;
 				switch (status) {
 					case "uploadError":
 					case "stageError":
@@ -102,11 +65,9 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 					case "partiallyDeployed":
 					case "notExists":
 					case "unknown":
-						//testResults = new TestResults(id, getTestErrorDescription(applicationInfo, node), "");
+						testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
 						testResults.setState(TestState.FAILED);
 						failingTestResults.add(testResults);
-						buildLogger.addBuildLogEntry("0001: failed");
-						//successfulTestResults.add(testResults);
 						break;
 						
 					case "activating":
@@ -114,42 +75,32 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 					case "staging":
 					case "unstaging":
 					case "rollingBack":
-						buildLogger.addBuildLogEntry("0002: skipped");
 						task.isDeploying(true);
 						break;
 						
 					case "OK":
 					case "deployed":
+						testResults = new TestResults(id, getTestSuccessDescription(serverInfo), "");
 						testResults.setState(TestState.SUCCESS);
 						successfulTestResults.add(testResults);
 						break;
 						
 					default:
+						testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
 						testResults.setState(TestState.FAILED);
 						failingTestResults.add(testResults);
 						break;
 				}
 			}
 
-		} catch (Exception ex) {
-			buildLogger.addBuildLogEntry("+++ Exception " + ex.getMessage());
+		} catch (Exception ex4) {
+			buildLogger.addErrorLogEntry("Exception: " + ex4.getMessage());
 		}
         
         return builder
                 .addSuccessfulTestResults(successfulTestResults)
                 .addFailedTestResults(failingTestResults)
                 .build();
-	}
-	
-	private String getValue(Element element, String tag) {
-		NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-		Node node = (Node) nodes.item(0);
-		return node.getNodeValue();
-	}
-	
-	private Element getElement(Element element, String tag) {
-		Element node = (Element) element.getElementsByTagName(tag).item(0);
-		return node;
 	}
 
 	public Set<String> getSupportedFileExtensions()
@@ -160,20 +111,21 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
         return set;
     }
 	
-	public String getTestErrorDescription(Element applicationInfo, Element serverInfo) {
-		Element messageList = getElement(applicationInfo, "messageList");
+	public String getTestErrorDescription(Element serverInfo) {
+		Element applicationInfo = parser.getNodeApplicationInfo();
+		Element messageList = parser.getNode(applicationInfo, "messageList");
 		String error;
 		try {
-			error = getValue(messageList, "error");
+			error = parser.getValue(messageList, "error");
 		}
 		catch (Exception e) {
 			error = "Unknown error";
 		}
 		
-		String deployedVersion = getValue(applicationInfo, "deployedVersion");
+		String deployedVersion = parser.getValue(applicationInfo, "deployedVersion");
 		
-		String status = getValue(serverInfo, "status");
-		String serverId = getValue(serverInfo, "id");
+		String status = parser.getValue(serverInfo, "status");
+		String serverId = parser.getValue(serverInfo, "id");
 		
 		String placeholder = "Server %s - Status: %s; Error: %s; Deployed Version: %s";
         String description = String.format(placeholder,
@@ -185,10 +137,10 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 	}
 	
 	public String getTestSuccessDescription(Element serverInfo) {
-		String deployedVersion = getValue(serverInfo, "deployedVersion");
+		String deployedVersion = parser.getValue(serverInfo, "deployedVersion");
 		
-		String status = getValue(serverInfo, "status");
-		String serverId = getValue(serverInfo, "id");
+		String status = parser.getValue(serverInfo, "status");
+		String serverId = parser.getValue(serverInfo, "id");
 		
 		String placeholder = "Server %s - Status: %s; Deployed Version: %s";
         String description = String.format(placeholder,
@@ -197,5 +149,4 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
         		deployedVersion);
 		return  description;
 	}
-	
 }

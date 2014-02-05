@@ -72,13 +72,6 @@ public class DeploymentTask implements TaskType {
 		zsclientLogDir.mkdirs();
 		
 		String deploymentLogFile = zsclientLogDir.getAbsolutePath() + "/deploy-" + buildNr + "-" + revision + ".log";
-        
-		try {
-		bandanaManager.setValue(PlanAwareBandanaContext.GLOBAL_CONTEXT, "org.zend-zendserver.plugins:deploymentLogFile", deploymentLogFile);
-		}
-		catch (Exception e) {
-			buildLogger.addBuildLogEntry(e.getMessage());
-		}
 		
         //String placeholder = "%s getSystemInfo --zsurl=%s --zskey=%s --zssecret=%s --zsversion=%s";
         String placeholder = "%s installApp --zpk %s --baseUri=%s --userAppName=%s --zsurl=%s --zskey=%s --zssecret=%s --zsversion=%s ";
@@ -91,6 +84,8 @@ public class DeploymentTask implements TaskType {
         		api_key,
         		api_secret,
         		zsversion);
+        
+        buildLogger.addBuildLogEntry("*** cmd: "+cmd);
         
         ProcessBuilder pb = new ProcessBuilder("bash", "-c", cmd);
         Process process;
