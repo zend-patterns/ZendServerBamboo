@@ -1,4 +1,4 @@
-package org.zend.zendserver.plugins;
+package org.zend.zendserver.bamboo.plugin.TaskResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,13 +29,13 @@ public abstract class ResultParser {
 		return (Element) doc.getElementsByTagName("responseData").item(0);
 	}
 	
-	protected String getValue(Element element, String tag) {
+	public String getValue(Element element, String tag) {
 		NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
 		Node node = (Node) nodes.item(0);
 		return node.getNodeValue();
 	}
 	
-	protected Element getNode(Element element, String tag) {
+	public Element getNode(Element element, String tag) {
 		Element node = (Element) element.getElementsByTagName(tag).item(0);
 		return node;
 	}

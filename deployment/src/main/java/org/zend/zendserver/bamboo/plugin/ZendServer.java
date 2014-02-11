@@ -1,4 +1,4 @@
-package org.zend.zendserver.plugins;
+package org.zend.zendserver.bamboo.plugin;
 
 public interface ZendServer
 {

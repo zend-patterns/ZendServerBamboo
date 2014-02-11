@@ -1,4 +1,4 @@
-package org.zend.zendserver.plugins;
+package org.zend.zendserver.bamboo.plugin;
 
 import java.util.Map;
 
@@ -24,11 +24,9 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("api_key", params.getString("api_key"));
         context.put("api_secret", params.getString("api_secret"));
         context.put("url", params.getString("url"));
-        context.put("package", params.getString("package"));
         context.put("base_url", params.getString("base_url"));
         context.put("app_name", params.getString("app_name"));
         context.put("zsversion", params.getString("zsversion"));
-        context.put("params", params.getString("params"));
         
         return context;
     }
@@ -42,11 +40,9 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("api_key", "bamboo");
         context.put("api_secret", "34b41b8df84d8c4de36f5927760071b9daf4d1dab3cd26459fa34d35ed48e7a7");
         context.put("url", "http://10.11.12.68:10081");
-        context.put("package", "abcxyz");
         context.put("base_url", "http://10.11.12.68");
         context.put("app_name", "myApp");
         context.put("zsversion", "6.1");
-        context.put("params", "-abc test123");
     }
 
     @Override
@@ -58,11 +54,9 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("api_key", taskDefinition.getConfiguration().get("api_key"));
         context.put("api_secret", taskDefinition.getConfiguration().get("api_secret"));
         context.put("url", taskDefinition.getConfiguration().get("url"));
-        context.put("package", taskDefinition.getConfiguration().get("package"));
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
-        context.put("params", taskDefinition.getConfiguration().get("params"));
     }
 
     @Override
@@ -73,11 +67,9 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("api_key", taskDefinition.getConfiguration().get("api_key"));
         context.put("api_secret", taskDefinition.getConfiguration().get("api_secret"));
         context.put("url", taskDefinition.getConfiguration().get("url"));
-        context.put("package", taskDefinition.getConfiguration().get("package"));
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
-        context.put("params", taskDefinition.getConfiguration().get("params"));
     }
 
     @Override
@@ -107,12 +99,6 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         if (StringUtils.isEmpty(urlValue))
         {
             errorCollection.addError("url", textProvider.getText("com.zend.zendserver.plugins.url.error"));
-        }
-        
-        final String packageValue = params.getString("package");
-        if (StringUtils.isEmpty(packageValue))
-        {
-            errorCollection.addError("package", textProvider.getText("com.zend.zendserver.plugins.package.error"));
         }
         
         final String baseUrlValue = params.getString("base_url");

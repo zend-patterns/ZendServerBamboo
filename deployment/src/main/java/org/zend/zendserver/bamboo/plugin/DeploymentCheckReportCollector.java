@@ -1,18 +1,13 @@
-package org.zend.zendserver.plugins;
+package org.zend.zendserver.bamboo.plugin;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.zend.zendserver.bamboo.plugin.TaskResult.ResultParserDeploymentCheck;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollectionResult;
@@ -20,10 +15,7 @@ import com.atlassian.bamboo.build.test.TestCollectionResultBuilder;
 import com.atlassian.bamboo.build.test.TestReportCollector;
 import com.atlassian.bamboo.results.tests.TestResults;
 import com.atlassian.bamboo.resultsummary.tests.TestState;
-import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.google.common.collect.Lists;
-
-////import org.zend.zendserver.plugins.*;
 
 public class DeploymentCheckReportCollector implements TestReportCollector {
 	private BuildLogger buildLogger;

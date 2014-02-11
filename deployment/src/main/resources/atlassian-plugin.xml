@@ -22,33 +22,33 @@
     </web-resource>
     
     <!-- publish our component -->
-    <component key="ZendServerPluginComponent" class="org.zend.zendserver.plugins.ZendServerImpl" public="true">
-        <interface>org.zend.zendserver.plugins.ZendServer</interface>
+    <component key="ZendServerPluginComponent" class="org.zend.zendserver.bamboo.plugin.ZendServerImpl" public="true">
+        <interface>org.zend.zendserver.bamboo.plugin.ZendServer</interface>
     </component>
     
     <!-- import from the product container -->
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
     
-    <taskType key="ZendServerPackagingTask" name="Zend Server Packaging Task" class="org.zend.zendserver.plugins.PackagingTask">
+    <taskType key="ZendServerPackagingTask" name="Zend Server Packaging Task" class="org.zend.zendserver.bamboo.plugin.PackagingTask">
   		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
-  		<configuration class="org.zend.zendserver.plugins.PackagingTaskConfigurator"/>
+  		<configuration class="org.zend.zendserver.bamboo.plugin.PackagingTaskConfigurator"/>
       	<resource type="freemarker" name="edit" location="editPackagingTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewPackagingTask.ftl"/>
 	</taskType>
 	
-    <taskType key="ZendServerDeploymentTask" name="Zend Server Deployment Task" class="org.zend.zendserver.plugins.DeploymentTask">
+    <taskType key="ZendServerDeploymentTask" name="Zend Server Deployment Task" class="org.zend.zendserver.bamboo.plugin.DeploymentTask">
   		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
-  		<configuration class="org.zend.zendserver.plugins.DeploymentTaskConfigurator"/>
+  		<configuration class="org.zend.zendserver.bamboo.plugin.DeploymentTaskConfigurator"/>
       	<resource type="freemarker" name="edit" location="editDeploymentTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentTask.ftl"/>
 	</taskType>
 	
-    <taskType key="ZendServerDeploymentCheckTask" name="Zend Server Deployment Check Task" class="org.zend.zendserver.plugins.DeploymentCheckTask">
+    <taskType key="ZendServerDeploymentCheckTask" name="Zend Server Deployment Check Task" class="org.zend.zendserver.bamboo.plugin.DeploymentCheckTask">
   		<description>Checks whether deployment was executed successfully</description>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
-  		<configuration class="org.zend.zendserver.plugins.DeploymentCheckTaskConfigurator"/>
+  		<configuration class="org.zend.zendserver.bamboo.plugin.DeploymentCheckTaskConfigurator"/>
   		<resource type="freemarker" name="edit" location="editDeploymentCheckTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentCheckTask.ftl"/>
 	</taskType>
