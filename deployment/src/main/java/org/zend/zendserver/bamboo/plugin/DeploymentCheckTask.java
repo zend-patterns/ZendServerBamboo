@@ -47,14 +47,14 @@ public class DeploymentCheckTask implements TaskType {
 			resultParserInstallApp = new ResultParserInstallApp(resultFile.getPathInstallApp(), buildLogger);
 			String applicationId = resultParserInstallApp.getApplicationId();
 
-			int repeat = 5;
-			int wait = 5;
+			int retry = Integer.parseInt(taskContext.getConfigurationMap().get("retry"));
+			int wait = Integer.parseInt(taskContext.getConfigurationMap().get("wait"));
 			int it = 0;
 			do {
 				isDeploying = false; 
 				try {
 					it++;
-					buildLogger.addBuildLogEntry("Test iteration " + it + " of " + repeat + "...");
+					buildLogger.addBuildLogEntry("Test iteration " + it + " of " + retry + "...");
 					if (it > 1) {
 						Thread.sleep(wait * 1000);
 					}
@@ -68,9 +68,9 @@ public class DeploymentCheckTask implements TaskType {
 						taskContext, 
 						ResultFile.APPLICATION_GET_DETAILS, 
 						new DeploymentCheckReportCollector(this, buildLogger));
-			} while(isDeploying && it <= repeat);
+			} while(isDeploying && it <= retry);
 
-			if (isDeploying && it >= repeat) {
+			if (isDeploying && it >= retry) {
 				buildLogger.addErrorLogEntry("Stop testing; deployment is still running. Aborting. ");
 				builder.failed();
 			}

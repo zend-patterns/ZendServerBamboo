@@ -5,3 +5,5 @@
 [@ww.textfield labelKey="Application Base URL" name="base_url" required='true'/]
 [@ww.textfield labelKey="Application Name" name="app_name" required='true'/]
 [@ww.textfield labelKey="Zend Server Version" name="zsversion" required='true'/]
+[@ww.textfield labelKey="Amount of retries for status check" name="retry" required='true'/]
+[@ww.textfield labelKey="Wait time (sec) between retry iterations" name="wait" required='true'/]

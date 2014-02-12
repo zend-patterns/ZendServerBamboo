@@ -28,7 +28,8 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", params.getString("base_url"));
         context.put("app_name", params.getString("app_name"));
         context.put("zsversion", params.getString("zsversion"));
-        context.put("params", params.getString("params"));
+        context.put("wait", params.getString("wait"));
+        context.put("retry", params.getString("retry"));
         
         return context;
     }
@@ -45,6 +46,8 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", "http://10.11.12.68");
         context.put("app_name", "myApp");
         context.put("zsversion", "6.1");
+        context.put("retry", "5");
+        context.put("wait", "10");
     }
 
     @Override
@@ -59,6 +62,8 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
+        context.put("retry", taskDefinition.getConfiguration().get("retry"));
+        context.put("wait", taskDefinition.getConfiguration().get("wait"));
     }
 
     @Override
@@ -71,7 +76,8 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("url", taskDefinition.getConfiguration().get("url"));
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
-        context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
+        context.put("retry", taskDefinition.getConfiguration().get("retry"));
+        context.put("wait", taskDefinition.getConfiguration().get("wait"));
     }
 
     @Override
@@ -113,6 +119,18 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         if (StringUtils.isEmpty(zsversionValue))
         {
             errorCollection.addError("zsversion", textProvider.getText("com.zend.zendserver.plugins.zsversion.error"));
+        }
+        
+        final String retryValue = params.getString("retry");
+        if (StringUtils.isEmpty(retryValue))
+        {
+            errorCollection.addError("retry", textProvider.getText("com.zend.zendserver.plugins.zsversion.error"));
+        }
+        
+        final String waitValue = params.getString("wait");
+        if (StringUtils.isEmpty(waitValue))
+        {
+            errorCollection.addError("wait", textProvider.getText("com.zend.zendserver.plugins.zsversion.error"));
         }
     }
 
