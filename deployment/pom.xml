@@ -5,8 +5,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.zend.zendserver.plugins</groupId>
-    <artifactId>deployment</artifactId>
+    <groupId>org.zend.zendserver.bamboo.plugin</groupId>
+    <artifactId>zendserver</artifactId>
     <version>0.1</version>
 
     <organization>
@@ -14,8 +14,8 @@
         <url>http://www.zend.com/</url>
     </organization>
 
-    <name>deployment</name>
-    <description>This is the org.zend.zendserver.plugins:deployment plugin for Atlassian Bamboo.</description>
+    <name>zendserver</name>
+    <description>This is the org.zend.zendserver.bamboo.plugin:zendserver plugin for Atlassian Bamboo.</description>
     <packaging>atlassian-plugin</packaging>
 
     <properties>

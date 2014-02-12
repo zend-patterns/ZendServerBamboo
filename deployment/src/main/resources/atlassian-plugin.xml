@@ -8,17 +8,17 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="deployment"/>
+    <resource type="i18n" name="i18n" location="zendserver"/>
     
     <!-- add our web resources -->
-    <web-resource key="deployment-resources" name="deployment Web Resources">
+    <web-resource key="zendserver-resources" name="zendserver Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         
         <resource type="download" name="deployment.css" location="/css/deployment.css"/>
         <resource type="download" name="deployment.js" location="/js/deployment.js"/>
         <resource type="download" name="images/" location="/images"/>
 
-        <context>deployment</context>
+        <context>zendserver</context>
     </web-resource>
     
     <!-- publish our component -->
