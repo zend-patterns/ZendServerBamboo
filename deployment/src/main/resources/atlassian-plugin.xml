@@ -8,7 +8,7 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="zendserver"/>
+    <resource type="i18n" name="i18n" location="i18n"/>
     
     <!-- add our web resources -->
     <web-resource key="zendserver-resources" name="zendserver Web Resources">
@@ -31,26 +31,37 @@
     
     <taskType key="ZendServerPackagingTask" name="Zend Server Packaging Task" class="org.zend.zendserver.bamboo.plugin.PackagingTask">
   		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
+  		<category name="builder"/>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
+  		<resource type="download" name="deployment.css" location="/css/deployment.css"/>
   		<configuration class="org.zend.zendserver.bamboo.plugin.PackagingTaskConfigurator"/>
       	<resource type="freemarker" name="edit" location="editPackagingTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewPackagingTask.ftl"/>
+      	<executable key="maven" nameKey="builder.maven.executableName" pathHelpKey="builder.maven.helpPath" />
 	</taskType>
 	
     <taskType key="ZendServerDeploymentTask" name="Zend Server Deployment Task" class="org.zend.zendserver.bamboo.plugin.DeploymentTask">
   		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
+  		<category name="deployment"/>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
   		<configuration class="org.zend.zendserver.bamboo.plugin.DeploymentTaskConfigurator"/>
       	<resource type="freemarker" name="edit" location="editDeploymentTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentTask.ftl"/>
+      	<capabilityDefaultsHelper class="org.zend.zendserver.bamboo.plugin.GradleCapabilityHelper"/>
 	</taskType>
 	
     <taskType key="ZendServerDeploymentCheckTask" name="Zend Server Deployment Check Task" class="org.zend.zendserver.bamboo.plugin.DeploymentCheckTask">
   		<description>Checks whether deployment was executed successfully</description>
+  		<category name="deployment"/>
+  		<category name="test"/>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
   		<configuration class="org.zend.zendserver.bamboo.plugin.DeploymentCheckTaskConfigurator"/>
   		<resource type="freemarker" name="edit" location="editDeploymentCheckTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentCheckTask.ftl"/>
 	</taskType>
-
+  	
+    <capabilityType key="system.zswa-client.executable" name="Zend Server Web API Client" class="org.zend.zendserver.bamboo.plugin.ZendServerWebApiClientCapability" sortOrder="2000">
+		<description>The Zend Server Web API Client capability type</description>
+		<resource type="freemarker" name="edit" location="editZswaClientCapability.ftl"/>
+	</capabilityType>
 </atlassian-plugin>

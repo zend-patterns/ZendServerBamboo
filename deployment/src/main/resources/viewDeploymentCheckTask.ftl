@@ -1,4 +1,3 @@
-[@ww.label labelKey="zs_client Location" name="zs_client_location"/]
 [@ww.label labelKey="API Key" name="api_key"/]
 [@ww.label labelKey="API Secret" name="api_secret"/]
 [@ww.label labelKey="Zend Server URL" name="url"/]

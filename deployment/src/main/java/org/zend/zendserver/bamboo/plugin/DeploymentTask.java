@@ -1,51 +1,47 @@
 package org.zend.zendserver.bamboo.plugin;
 
-import org.zend.zendserver.bamboo.plugin.Helper.Build;
-import org.zend.zendserver.bamboo.plugin.Helper.Zpk;
-import org.zend.zendserver.bamboo.plugin.TaskResult.ResultFile;
-import org.zend.zendserver.bamboo.plugin.ZendServerSDK.Call;
-import org.zend.zendserver.bamboo.plugin.ZendServerSDK.Command;
+import org.zend.zendserver.bamboo.plugin.Process.DeploymentProcess;
+import org.zend.zendserver.bamboo.plugin.Process.ExecutableHelper;
+import org.zend.zendserver.bamboo.plugin.Process.ProcessHandler;
 
-import com.atlassian.bamboo.build.logger.BuildLogger;
+import com.atlassian.bamboo.process.ProcessService;
 import com.atlassian.bamboo.task.TaskContext;
 import com.atlassian.bamboo.task.TaskException;
 import com.atlassian.bamboo.task.TaskResult;
 import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.atlassian.bamboo.task.TaskType;
+import com.atlassian.bamboo.v2.build.agent.capability.CapabilityContext;
 
 public class DeploymentTask implements TaskType {
-	
-	@Override
+	private CapabilityContext capabilityContext;
+    
+    private final ProcessService processService;
+
+    public DeploymentTask(final ProcessService processService, final CapabilityContext capabilityContext)
+    {
+        this.processService = processService;
+        this.capabilityContext = capabilityContext;
+    }
+    
 	public TaskResult execute(final TaskContext taskContext)
 			throws TaskException {
 		
 		TaskResultBuilder builder = TaskResultBuilder.create(taskContext);
-		builder.failed();
-		BuildLogger buildLogger = taskContext.getBuildLogger();
 		
 		try {
 			Thread.sleep(5000);
 		}
 		catch (Exception e) {}
 		
-		Command cmd = new Command(taskContext.getConfigurationMap());
-		Call call = new Call(buildLogger);
-		Build build = new Build(taskContext);
-		Zpk zpk = new Zpk(taskContext, build);
-		ResultFile resultFile = new ResultFile(taskContext, build);
-				
-		String installCmd = cmd.getInstallApp(
-				zpk.getPath(),
-				resultFile.getPathInstallApp()
-				);
+		taskContext.getBuildLogger().addBuildLogEntry("Deployment has started...");
 		
-		buildLogger.addBuildLogEntry("Deployment has started...");
-		call.execute(installCmd);
-		if (!call.isFailed()) {
-			builder.success();
-		}
+		ExecutableHelper eh = new ExecutableHelper(capabilityContext); 
+		DeploymentProcess deployProcess = new DeploymentProcess(taskContext, eh);
+		ProcessHandler processHandler = new ProcessHandler(deployProcess, taskContext);
+		
+		processHandler.execute();
 
-        return builder.build();
+		return builder.checkReturnCode(processHandler.getExternalProcess()).build();
 	}
 
 }

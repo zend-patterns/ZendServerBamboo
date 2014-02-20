@@ -20,7 +20,7 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         final Map<String, String> context = super.generateTaskConfigMap(params, previousTaskDefinition);
 
-        context.put("zs_client_location", params.getString("zs_client_location"));
+        context.put("zpk_name", params.getString("zpk_name"));
         
         return context;
     }
@@ -30,7 +30,7 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForCreate(context);
 
-        context.put("zs_client_location", "/usr/local/bin/zs-client");
+        context.put("zpk_name", "");
     }
 
     @Override
@@ -38,14 +38,14 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForEdit(context, taskDefinition);
 
-        context.put("zs_client_location", taskDefinition.getConfiguration().get("zs_client_location"));
+        context.put("zpk_name", taskDefinition.getConfiguration().get("zpk_name"));
     }
 
     @Override
     public void populateContextForView(@NotNull final Map<String, Object> context, @NotNull final TaskDefinition taskDefinition)
     {
         super.populateContextForView(context, taskDefinition);
-        context.put("zs_client_location", taskDefinition.getConfiguration().get("zs_client_location"));
+        context.put("zpk_name", taskDefinition.getConfiguration().get("zpk_name"));
     }
 
     @Override
@@ -53,10 +53,10 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.validate(params, errorCollection);
 
-        final String zsClientLocationValue = params.getString("zs_client_location");
-        if (StringUtils.isEmpty(zsClientLocationValue))
+        final String zpkNameLocationValue = params.getString("zpk_name");
+        if (StringUtils.isEmpty(zpkNameLocationValue))
         {
-            errorCollection.addError("zs_client_location", textProvider.getText("com.zend.zendserver.plugins.zs_client_location.error"));
+            errorCollection.addError("zpk_name", textProvider.getText("com.zend.zendserver.plugins.zpk_name.error"));
         }
     }
 

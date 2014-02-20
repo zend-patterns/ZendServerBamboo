@@ -36,7 +36,7 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 		
         try {
         	
-        	parser = new ResultParserDeploymentCheck(file.getAbsolutePath(), buildLogger);
+        	parser = new ResultParserDeploymentCheck(file.getAbsolutePath());
         	NodeList servers = parser.getNodeListServer();
 
         	buildLogger.addBuildLogEntry("Checking " + String.valueOf((servers.getLength() - 1)) + " servers for correct deployment");

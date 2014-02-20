@@ -1,1 +1,1 @@
-[@ww.textfield labelKey="com.zend.zendserver.plugins.zs_client_location" name="zs_client_location" required='true'/]
+[@ww.textfield labelKey="Package (ZPK) name" name="zpk_name" required='true'/]

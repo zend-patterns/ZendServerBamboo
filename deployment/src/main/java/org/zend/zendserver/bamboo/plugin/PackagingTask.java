@@ -1,48 +1,41 @@
 package org.zend.zendserver.bamboo.plugin;
 
-import org.zend.zendserver.bamboo.plugin.Helper.Build;
-import org.zend.zendserver.bamboo.plugin.Helper.Zpk;
-import org.zend.zendserver.bamboo.plugin.TaskResult.ResultFile;
-import org.zend.zendserver.bamboo.plugin.ZendServerSDK.Call;
-import org.zend.zendserver.bamboo.plugin.ZendServerSDK.Command;
+import org.zend.zendserver.bamboo.plugin.Process.ExecutableHelper;
+import org.zend.zendserver.bamboo.plugin.Process.PackagingProcess;
+import org.zend.zendserver.bamboo.plugin.Process.ProcessHandler;
 
-import com.atlassian.bamboo.build.logger.BuildLogger;
+import com.atlassian.bamboo.process.ProcessService;
 import com.atlassian.bamboo.task.TaskContext;
 import com.atlassian.bamboo.task.TaskException;
 import com.atlassian.bamboo.task.TaskResult;
 import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.atlassian.bamboo.task.TaskType;
+import com.atlassian.bamboo.v2.build.agent.capability.CapabilityContext;
 
 public class PackagingTask implements TaskType {
 
-	@Override
-	public TaskResult execute(final TaskContext taskContext)
+    private CapabilityContext capabilityContext;
+    
+    private final ProcessService processService;
+
+    public PackagingTask(final ProcessService processService, final CapabilityContext capabilityContext)
+    {
+        this.processService = processService;
+        this.capabilityContext = capabilityContext;
+    }
+     
+    public TaskResult execute(final TaskContext taskContext)
 			throws TaskException {
 		
 		TaskResultBuilder builder = TaskResultBuilder.create(taskContext);
-		BuildLogger buildLogger = taskContext.getBuildLogger();
- 
-		Command cmd = new Command(taskContext.getConfigurationMap());
-		Call call = new Call(buildLogger);
-		Build build = new Build(taskContext);
-		Zpk zpk = new Zpk(taskContext, build);
-		ResultFile resultFile = new ResultFile(taskContext, build);
 		
-		String packCmd = cmd.getPackZpk(
-				taskContext.getWorkingDirectory().getAbsolutePath(), 
-				zpk.getDir(), 
-				zpk.getFileName(),
-				zpk.createVersion(),
-				resultFile.getPathPackZpk());
-		call.execute(packCmd);
+		ExecutableHelper eh = new ExecutableHelper(capabilityContext); 
+		PackagingProcess packProcess = new PackagingProcess(taskContext, eh);
+		ProcessHandler processHandler = new ProcessHandler(packProcess, taskContext);
 		
-		if (call.isFailed()) {
-			builder.failed();
-		}
-		else {
-			builder.success();
-		}
-        return builder.build();
+		processHandler.execute();
+
+		return builder.checkReturnCode(processHandler.getExternalProcess()).build();
 	}
 
 }

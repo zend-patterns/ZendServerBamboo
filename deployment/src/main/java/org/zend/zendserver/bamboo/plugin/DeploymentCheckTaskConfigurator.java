@@ -20,7 +20,6 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
     {
         final Map<String, String> context = super.generateTaskConfigMap(params, previousTaskDefinition);
 
-        context.put("zs_client_location", params.getString("zs_client_location"));
         context.put("api_key", params.getString("api_key"));
         context.put("api_secret", params.getString("api_secret"));
         context.put("url", params.getString("url"));
@@ -39,7 +38,6 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForCreate(context);
 
-        context.put("zs_client_location", "/tmp/zs-client");
         context.put("api_key", "bamboo");
         context.put("api_secret", "34b41b8df84d8c4de36f5927760071b9daf4d1dab3cd26459fa34d35ed48e7a7");
         context.put("url", "http://10.11.12.68:10081");
@@ -55,7 +53,6 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForEdit(context, taskDefinition);
 
-        context.put("zs_client_location", taskDefinition.getConfiguration().get("zs_client_location"));
         context.put("api_key", taskDefinition.getConfiguration().get("api_key"));
         context.put("api_secret", taskDefinition.getConfiguration().get("api_secret"));
         context.put("url", taskDefinition.getConfiguration().get("url"));
@@ -70,7 +67,6 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
     public void populateContextForView(@NotNull final Map<String, Object> context, @NotNull final TaskDefinition taskDefinition)
     {
         super.populateContextForView(context, taskDefinition);
-        context.put("zs_client_location", taskDefinition.getConfiguration().get("zs_client_location"));
         context.put("api_key", taskDefinition.getConfiguration().get("api_key"));
         context.put("api_secret", taskDefinition.getConfiguration().get("api_secret"));
         context.put("url", taskDefinition.getConfiguration().get("url"));
@@ -84,12 +80,6 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
     public void validate(@NotNull final ActionParametersMap params, @NotNull final ErrorCollection errorCollection)
     {
         super.validate(params, errorCollection);
-
-        final String zsClientLocationValue = params.getString("zs_client_location");
-        if (StringUtils.isEmpty(zsClientLocationValue))
-        {
-            errorCollection.addError("zs_client_location", textProvider.getText("com.zend.zendserver.plugins.zs_client_location.error"));
-        }
         
         final String apiKeyValue = params.getString("api_key");
         if (StringUtils.isEmpty(apiKeyValue))
