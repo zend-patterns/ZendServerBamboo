@@ -48,40 +48,43 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 				
 				buildLogger.addBuildLogEntry("Server " + id + " has status " + status);
 				TestResults testResults;
-				switch (status) {
-					case "uploadError":
-					case "stageError":
-					case "activateError":
-					case "deactivateError":
-					case "unstageError":
-					case "partiallyDeployed":
-					case "notExists":
-					case "unknown":
-						testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
-						testResults.setState(TestState.FAILED);
-						failingTestResults.add(testResults);
-						break;
-						
-					case "activating":
-					case "deactivating":
-					case "staging":
-					case "unstaging":
-					case "rollingBack":
+				
+				if (status.equals("uploadError") ||
+					status.equals("stageError") ||
+					status.equals("activateError") ||
+					status.equals("deactivateError") ||
+					status.equals("unstageError") ||
+					status.equals("partiallyDeployed") ||
+					status.equals("notExists") ||
+					status.equals("unknown")) 
+				{
+					testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
+					testResults.setState(TestState.FAILED);
+					failingTestResults.add(testResults);
+				}
+				else {
+					if (status.equals("activating") ||
+						status.equals("deactivating") ||
+						status.equals("staging") ||
+						status.equals("unstaging") ||
+						status.equals("rollingBack")) 
+					{
 						task.isDeploying(true);
-						break;
-						
-					case "OK":
-					case "deployed":
-						testResults = new TestResults(id, getTestSuccessDescription(serverInfo), "");
-						testResults.setState(TestState.SUCCESS);
-						successfulTestResults.add(testResults);
-						break;
-						
-					default:
-						testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
-						testResults.setState(TestState.FAILED);
-						failingTestResults.add(testResults);
-						break;
+					}
+					else {
+						if (status.equals("OK") ||
+							status.equals("deployed")) 
+						{
+							testResults = new TestResults(id, getTestSuccessDescription(serverInfo), "");
+							testResults.setState(TestState.SUCCESS);
+							successfulTestResults.add(testResults);
+						}						
+						else {
+							testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
+							testResults.setState(TestState.FAILED);
+							failingTestResults.add(testResults);
+						}
+					}
 				}
 			}
 
