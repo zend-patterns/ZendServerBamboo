@@ -11,11 +11,10 @@
     </organization>
     <name>zendserver</name>
     <description>This is the org.zend.zendserver.bamboo.plugin:zendserver plugin for Atlassian Bamboo.</description>
-    <packaging>atlassian-plugin</packaging>
     <properties>
         <bamboo.version>5.3</bamboo.version>
         <bamboo.data.version>3.2.2</bamboo.data.version>
-        <amps.version>4.2.15</amps.version>
+        <amps.version>4.2.18</amps.version>
         <plugin.testrunner.version>1.1.2</plugin.testrunner.version>
     </properties>
     <dependencies>
@@ -71,4 +70,5 @@
             </plugin>
         </plugins>
     </build>
+    <packaging>atlassian-plugin</packaging>
 </project>
