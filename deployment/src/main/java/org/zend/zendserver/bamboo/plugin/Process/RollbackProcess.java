@@ -32,7 +32,7 @@ public class RollbackProcess implements Process {
 				executableHelper.getExecutable(),
 				"applicationRollback",
 				"--appId=" + applicationId,
-				"--zsurl=" + configMap.get("url"),
+				"--zsurl=" + configMap.get("zs_url"),
 				"--zskey=" + configMap.get("api_key"),
         		"--zssecret=" + configMap.get("api_secret"),
         		"--zsversion=" + configMap.get("zsversion"));

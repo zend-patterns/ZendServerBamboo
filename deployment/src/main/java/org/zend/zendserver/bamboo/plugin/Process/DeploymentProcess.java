@@ -44,7 +44,7 @@ public class DeploymentProcess implements Process {
 				"--zpk=" + zpk.getPath(),
 				"--baseUri=" + configMap.get("base_url"),
 				"--userAppName=" + configMap.get("app_name"),
-				"--zsurl=" + configMap.get("url"),
+				"--zsurl=" + configMap.get("zs_url"),
 				"--zskey=" + configMap.get("api_key"),
         		"--zssecret=" + configMap.get("api_secret"),
         		"--zsversion=" + configMap.get("zsversion"));

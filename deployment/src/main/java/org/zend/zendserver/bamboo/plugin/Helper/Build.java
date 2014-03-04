@@ -13,7 +13,9 @@ public class Build {
 		Object[] repositoryIds = taskContext.getBuildContext().getRelevantRepositoryIds().toArray();
         Long repositoryId = Long.valueOf(String.valueOf(repositoryIds[0]));
         
-        return taskContext.getBuildContext().getBuildChanges().getVcsRevisionKey(repositoryId);
+        String revision = taskContext.getBuildContext().getBuildChanges().getVcsRevisionKey(repositoryId);
+        revision = revision.substring(0, 6);
+        return revision;
 	}
 	
 	public String getBuildNr() {

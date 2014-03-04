@@ -34,7 +34,7 @@ public class ApplicationGetDetailsProcess implements Process {
 				executableHelper.getExecutable(),
 				"applicationGetDetails",
 				"--application=" + applicationId,
-				"--zsurl=" + configMap.get("url"),
+				"--zsurl=" + configMap.get("zs_url"),
 				"--zskey=" + configMap.get("api_key"),
         		"--zssecret=" + configMap.get("api_secret"),
         		"--zsversion=" + configMap.get("zsversion"));

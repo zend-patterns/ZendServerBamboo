@@ -61,7 +61,7 @@ private CapabilityContext capabilityContext;
 			applicationGetDetailsProcess.setApplicationId(applicationId);
 			
 			int retry = Integer.parseInt(taskContext.getConfigurationMap().get("retry"));
-			int wait = Integer.parseInt(taskContext.getConfigurationMap().get("wait"));
+			int waittime = Integer.parseInt(taskContext.getConfigurationMap().get("waittime"));
 			int it = 0;
 			do {
 				isDeploying = false; 
@@ -69,7 +69,7 @@ private CapabilityContext capabilityContext;
 					it++;
 					buildLogger.addBuildLogEntry("Test iteration " + it + " of " + retry + "...");
 					if (it > 1) {
-						Thread.sleep(wait * 1000);
+						Thread.sleep(waittime * 1000);
 					}
 					applicationGetDetailsProcessHandler = new ProcessHandler(applicationGetDetailsProcess, taskContext);
 					applicationGetDetailsProcess.incTestIteration();
