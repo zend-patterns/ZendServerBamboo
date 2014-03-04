@@ -35,10 +35,10 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForCreate(context);
 
-        context.put("zs_url", "http://10.11.12.68:10081");
-        context.put("api_key", "bamboo");
-        context.put("api_secret", "34b41b8df84d8c4de36f5927760071b9daf4d1dab3cd26459fa34d35ed48e7a7");
-        context.put("base_url", "http://10.11.12.68");
+        context.put("zs_url", "http://HOSTNAME:10081");
+        context.put("api_key", "");
+        context.put("api_secret", "");
+        context.put("base_url", "");
         context.put("app_name", "myApp");
         context.put("zsversion", "6.3");
     }
