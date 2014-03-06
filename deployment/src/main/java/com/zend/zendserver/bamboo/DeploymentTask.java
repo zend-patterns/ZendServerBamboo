@@ -69,7 +69,6 @@ public class DeploymentTask implements TaskType, CommonTaskType {
 			Thread.sleep(5000);
 		}
 		catch (Exception e) {}
-		
 		ExecutableHelper eh = new ExecutableHelper(capabilityContext); 
 		DeploymentProcess deployProcess = new DeploymentProcess(configMap, eh);
 		deployProcess.setBuildEnv(buildEnv);

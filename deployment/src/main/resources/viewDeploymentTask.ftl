@@ -4,3 +4,4 @@
 [@ww.label labelKey="Application Base URL" name="base_url"/]
 [@ww.label labelKey="Application Name" name="app_name"/]
 [@ww.label labelKey="Zend Server Version" name="zsversion"/]
+[@ww.label labelKey="User Params" name="userparams"/]

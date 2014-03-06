@@ -26,6 +26,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", params.getString("base_url"));
         context.put("app_name", params.getString("app_name"));
         context.put("zsversion", params.getString("zsversion"));
+        context.put("userparams", params.getString("userparams"));
         
         return context;
     }
@@ -41,6 +42,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", "");
         context.put("app_name", "myApp");
         context.put("zsversion", "6.3");
+        context.put("userparams", "");
     }
 
     @Override
@@ -54,6 +56,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
+        context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
     }
 
     @Override
@@ -67,6 +70,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
+        context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
     }
 
     @Override
@@ -83,6 +87,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         validator.validateAppName();
         validator.validateBaseUrl();
         validator.validateZsVersion();
+        
     }
     
     public void setTextProvider(final TextProvider textProvider)
