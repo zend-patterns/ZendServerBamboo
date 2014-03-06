@@ -3,28 +3,28 @@ package org.zend.zendserver.bamboo.plugin.Process;
 import java.util.Arrays;
 import java.util.List;
 
-import org.zend.zendserver.bamboo.plugin.Helper.Build;
-import org.zend.zendserver.bamboo.plugin.Helper.Zpk;
+import org.zend.zendserver.bamboo.plugin.Env.BuildEnv;
 
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.task.TaskContext;
 
 public class DeploymentProcess implements Process {
 	
 	public static final String OUTPUT_FILE_PREFIX = "zwsa/installApp-";
 	public static final String OUTPUT_FILE_SUFFIX = ".xml";
 	
-	private final TaskContext taskContext;
+	private final ConfigurationMap configMap;
 	private ExecutableHelper executableHelper;
 	
-	public DeploymentProcess(TaskContext taskContext)
+	private BuildEnv buildEnv;
+	
+	public DeploymentProcess(ConfigurationMap configMap)
     {
-		this.taskContext = taskContext;
+		this.configMap = configMap;
     }
 	
-	public DeploymentProcess(TaskContext taskContext, ExecutableHelper executableHelper)
+	public DeploymentProcess(ConfigurationMap configMap, ExecutableHelper executableHelper)
     {
-		this.taskContext = taskContext;
+		this.configMap = configMap;
 		this.executableHelper = executableHelper;
     }
 	
@@ -32,16 +32,15 @@ public class DeploymentProcess implements Process {
 		this.executableHelper = executableHelper;
 	}
 	
+	public void setBuildEnv(BuildEnv buildEnv) {
+		this.buildEnv = buildEnv;
+	}
+	
 	public List<String> getCommandList() throws Exception {
-		Build build = new Build(taskContext);
-		Zpk zpk = new Zpk(taskContext, build);
-		
-		ConfigurationMap configMap = taskContext.getConfigurationMap();
-		
 		List<String> commandList = Arrays.asList(
 				executableHelper.getExecutable(),
 				"installApp",
-				"--zpk=" + zpk.getPath(),
+				"--zpk=" + buildEnv.getZpkPath(),
 				"--baseUri=" + configMap.get("base_url"),
 				"--userAppName=" + configMap.get("app_name"),
 				"--zsurl=" + configMap.get("zs_url"),

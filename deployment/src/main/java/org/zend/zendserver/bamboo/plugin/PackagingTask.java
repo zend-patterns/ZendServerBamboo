@@ -1,5 +1,6 @@
 package org.zend.zendserver.bamboo.plugin;
 
+import org.zend.zendserver.bamboo.plugin.Env.Build;
 import org.zend.zendserver.bamboo.plugin.Process.ExecutableHelper;
 import org.zend.zendserver.bamboo.plugin.Process.PackagingProcess;
 import org.zend.zendserver.bamboo.plugin.Process.ProcessHandler;
@@ -30,8 +31,12 @@ public class PackagingTask implements TaskType {
 		TaskResultBuilder builder = TaskResultBuilder.create(taskContext);
 		
 		ExecutableHelper eh = new ExecutableHelper(capabilityContext); 
-		PackagingProcess packProcess = new PackagingProcess(taskContext, eh);
-		ProcessHandler processHandler = new ProcessHandler(packProcess, taskContext);
+		PackagingProcess packProcess = new PackagingProcess(taskContext.getConfigurationMap(), eh);
+		Build build = new Build(taskContext);
+		packProcess.setBuildEnv(build);
+		
+		ProcessHandler processHandler = new ProcessHandler(packProcess, taskContext.getBuildLogger());
+		processHandler.setBuildEnv(build);
 		
 		processHandler.execute();
 

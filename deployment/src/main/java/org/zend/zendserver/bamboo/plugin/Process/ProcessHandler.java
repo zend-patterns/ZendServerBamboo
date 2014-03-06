@@ -2,7 +2,8 @@ package org.zend.zendserver.bamboo.plugin.Process;
 
 import java.io.File;
 
-import org.zend.zendserver.bamboo.plugin.Helper.Build;
+import org.zend.zendserver.bamboo.plugin.Env.Build;
+import org.zend.zendserver.bamboo.plugin.Env.BuildEnv;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.task.TaskContext;
@@ -11,19 +12,18 @@ import com.atlassian.utils.process.ExternalProcessBuilder;
 import com.atlassian.utils.process.PluggableProcessHandler;
 
 public class ProcessHandler {
-	private final TaskContext taskContext;
 	private Process process;
 	private ExternalProcess externalProcess;
 	private PluggableProcessHandler processHandler;
 	private BuildLogger buildLogger;
 	
 	private Boolean failed = false;
+	private BuildEnv buildEnv;
 	
-	public ProcessHandler(Process process, TaskContext taskContext)
+	public ProcessHandler(Process process, BuildLogger buildLogger)
     {
 		this.process = process;
-		this.taskContext = taskContext;
-		this.buildLogger = taskContext.getBuildLogger();
+		this.buildLogger = buildLogger;
 		
 		this.processHandler = new PluggableProcessHandler();
     }
@@ -42,11 +42,8 @@ public class ProcessHandler {
 	
 	public void execute() {
 		try {
-			
 			OutputHandler outputHandler = new OutputHandler(processHandler, getOutputFilename(), buildLogger);
-			
 			ExternalProcessBuilder pb = getProcessBuilder();
-			
 			externalProcess = pb.build();
 			externalProcess.execute();
 			
@@ -68,15 +65,17 @@ public class ProcessHandler {
 		return failed;
 	}
 	
-	public String getOutputFilename() {
-		Build build = new Build(taskContext);
+	public void setBuildEnv(BuildEnv buildEnv) {
+		this.buildEnv = buildEnv;
+	}
+	
+	public String getOutputFilename() throws Exception {
 		StringBuilder filename = new StringBuilder();
-		filename.append(taskContext.getWorkingDirectory().getAbsolutePath());
+		filename.append(buildEnv.getWorkingDir());
 		filename.append("/");
 		filename.append(process.getOutputFilePrefix());
-		filename.append(build.getBuildNr());
-		filename.append("-");
-		filename.append(build.getRevision());
+		filename.append(buildEnv.getVersion());
+
 		filename.append(process.getOutputFileSuffix());
 		
 		File dir = new File(new File(filename.toString()).getParent());
