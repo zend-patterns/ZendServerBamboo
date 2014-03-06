@@ -22,45 +22,45 @@
     </web-resource>
     
     <!-- publish our component -->
-    <component key="ZendServerPluginComponent" class="org.zend.zendserver.bamboo.plugin.ZendServerImpl" public="true">
-        <interface>org.zend.zendserver.bamboo.plugin.ZendServer</interface>
+    <component key="ZendServerPluginComponent" class="com.zend.zendserver.bamboo.ZendServerImpl" public="true">
+        <interface>com.zend.zendserver.bamboo.ZendServer</interface>
     </component>
     
     <!-- import from the product container -->
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
     
-    <taskType key="ZendServerPackagingTask" name="Zend Server Packaging Task" class="org.zend.zendserver.bamboo.plugin.PackagingTask">
+    <taskType key="ZendServerPackagingTask" name="Zend Server Packaging Task" class="com.zend.zendserver.bamboo.PackagingTask">
   		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
   		<category name="builder"/>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
   		<resource type="download" name="deployment.css" location="/css/deployment.css"/>
-  		<configuration class="org.zend.zendserver.bamboo.plugin.PackagingTaskConfigurator"/>
+  		<configuration class="com.zend.zendserver.bamboo.PackagingTaskConfigurator"/>
       	<resource type="freemarker" name="edit" location="editPackagingTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewPackagingTask.ftl"/>
       	<executable key="maven" nameKey="builder.maven.executableName" pathHelpKey="builder.maven.helpPath" />
 	</taskType>
 	
-    <taskType key="ZendServerDeploymentTask" name="Zend Server Deployment Task" class="org.zend.zendserver.bamboo.plugin.DeploymentTask">
+    <taskType key="ZendServerDeploymentTask" name="Zend Server Deployment Task" class="com.zend.zendserver.bamboo.DeploymentTask">
   		<description>Deploys ZPK files to a Zend Server instance / cluster</description>
   		<category name="deployment"/>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
-  		<configuration class="org.zend.zendserver.bamboo.plugin.DeploymentTaskConfigurator"/>
+  		<configuration class="com.zend.zendserver.bamboo.DeploymentTaskConfigurator"/>
       	<resource type="freemarker" name="edit" location="editDeploymentTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentTask.ftl"/>
-      	<capabilityDefaultsHelper class="org.zend.zendserver.bamboo.plugin.GradleCapabilityHelper"/>
+      	<capabilityDefaultsHelper class="com.zend.zendserver.bamboo.GradleCapabilityHelper"/>
 	</taskType>
 	
-    <taskType key="ZendServerDeploymentCheckTask" name="Zend Server Deployment Check Task" class="org.zend.zendserver.bamboo.plugin.DeploymentCheckTask">
+    <taskType key="ZendServerDeploymentCheckTask" name="Zend Server Deployment Check Task" class="com.zend.zendserver.bamboo.DeploymentCheckTask">
   		<description>Checks whether deployment was executed successfully</description>
   		<category name="deployment"/>
   		<category name="test"/>
   		<resource type="download" name="icon" location="images/zend_logo.png"/>
-  		<configuration class="org.zend.zendserver.bamboo.plugin.DeploymentCheckTaskConfigurator"/>
+  		<configuration class="com.zend.zendserver.bamboo.DeploymentCheckTaskConfigurator"/>
   		<resource type="freemarker" name="edit" location="editDeploymentCheckTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentCheckTask.ftl"/>
 	</taskType>
   	
-    <capabilityType key="system.zswa-client.executable" name="Zend Server Web API Client" class="org.zend.zendserver.bamboo.plugin.ZendServerWebApiClientCapability" sortOrder="2000">
+    <capabilityType key="system.zswa-client.executable" name="Zend Server Web API Client" class="com.zend.zendserver.bamboo.ZendServerWebApiClientCapability" sortOrder="2000">
 		<description>The Zend Server Web API Client capability type</description>
 		<resource type="freemarker" name="edit" location="editZswaClientCapability.ftl"/>
 	</capabilityType>
