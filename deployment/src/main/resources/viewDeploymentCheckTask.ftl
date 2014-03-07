@@ -6,3 +6,4 @@
 [@ww.label labelKey="Zend Server Version" name="zsversion"/]
 [@ww.label labelKey="Amount of retries for status check" name="retry"/]
 [@ww.label labelKey="Wait time (sec) between retry iterations" name="waittime"/]
+[@ww.label labelKey="Rollback automatically in case of a deployment error" name="rollback"/]

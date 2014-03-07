@@ -32,6 +32,7 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", params.getString("zsversion"));
         context.put("retry", params.getString("retry"));
         context.put("waittime", params.getString("waittime"));
+        context.put("rollback", params.getString("rollback"));
         
         return context;
     }
@@ -49,6 +50,7 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", "6.3");
         context.put("retry", "3");
         context.put("waittime", "10");
+        context.put("rollback", true);
     }
 
     @Override
@@ -64,6 +66,7 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("retry", taskDefinition.getConfiguration().get("retry"));
         context.put("waittime", taskDefinition.getConfiguration().get("waittime"));
+        context.put("rollback", taskDefinition.getConfiguration().get("rollback"));
     }
 
     @Override
@@ -78,6 +81,7 @@ public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("retry", taskDefinition.getConfiguration().get("retry"));
         context.put("waittime", taskDefinition.getConfiguration().get("waittime"));
+        context.put("rollback", taskDefinition.getConfiguration().get("rollback"));
     }
 
     @Override
