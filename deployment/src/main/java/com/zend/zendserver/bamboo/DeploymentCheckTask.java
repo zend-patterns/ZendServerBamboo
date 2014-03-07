@@ -3,6 +3,8 @@ package com.zend.zendserver.bamboo;
 import java.io.File;
 import java.util.Iterator;
 
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Element;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollationService;
@@ -27,6 +29,7 @@ import com.zend.zendserver.bamboo.Process.DeploymentProcess;
 import com.zend.zendserver.bamboo.Process.ExecutableHelper;
 import com.zend.zendserver.bamboo.Process.ProcessHandler;
 import com.zend.zendserver.bamboo.Process.RollbackProcess;
+import com.zend.zendserver.bamboo.TaskResult.ResultParserDeploymentCheck;
 import com.zend.zendserver.bamboo.TaskResult.ResultParserInstallApp;
 
 public class DeploymentCheckTask implements CommonTaskType, TaskType {
@@ -160,7 +163,43 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 					ProcessHandler rollbackProcessHandler = new ProcessHandler(rollbackProcess, buildLogger);
 					rollbackProcessHandler.setBuildEnv(buildEnv);
 					
+					buildLogger.addErrorLogEntry("Rolling back Application " + applicationId);
 					rollbackProcessHandler.execute();
+					
+					int itRollback = 0;
+					Boolean isRollingback = true;
+					do {
+						itRollback++;
+						buildLogger.addBuildLogEntry("Waiting for successful rollback (Iteration " + itRollback + " of " + retry + ")");
+						if (itRollback > 1) {
+							Thread.sleep(waittime * 1000);
+						}
+						applicationGetDetailsProcess.setApplicationId(applicationId);
+						applicationGetDetailsProcessHandler = new ProcessHandler(applicationGetDetailsProcess, buildLogger);
+						applicationGetDetailsProcessHandler.setBuildEnv(buildEnv);
+						applicationGetDetailsProcess.incTestIteration();
+						applicationGetDetailsProcessHandler.execute();
+						
+						ResultParserDeploymentCheck parser = new ResultParserDeploymentCheck(applicationGetDetailsProcessHandler.getOutputFilename());
+						NodeList servers = parser.getNodeListServer();
+						for (int i = 0; i < servers.getLength() - 1; i++) {
+							Element serverInfo = (Element) servers.item(i);
+							String id = parser.getValue(serverInfo, "id");
+							String status = parser.getValue(serverInfo, "status");
+							if (status.equals("deployed")) { 
+								String deployedVersion = parser.getValue(serverInfo, "deployedVersion");
+								buildLogger.addErrorLogEntry("Server " + id + " - version of current App installed: " + deployedVersion);
+								isRollingback = false;
+							}
+						}
+					} while(isRollingback && itRollback <= retry);
+					if (isRollingback && it >= retry) {
+						buildLogger.addErrorLogEntry("Rollback FAILED! Please check application status in Zend Server UI!");
+						builder.failed();
+					}
+					else {
+						buildLogger.addErrorLogEntry("Rollback succeeded!");
+					}
 				}
 				catch (Exception e) {
 					buildLogger.addErrorLogEntry("Exception: "+e.getMessage());
