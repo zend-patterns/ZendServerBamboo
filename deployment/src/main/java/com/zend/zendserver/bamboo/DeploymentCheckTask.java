@@ -194,7 +194,7 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 								}
 							}
 						} while(isRollingback && itRollback <= retry);
-						if (isRollingback && it >= retry) {
+						if (isRollingback && itRollback >= retry) {
 							buildLogger.addErrorLogEntry("Rollback FAILED! Please check application status in Zend Server UI!");
 							builder.failed();
 						}
