@@ -59,6 +59,15 @@
   		<resource type="freemarker" name="edit" location="editDeploymentCheckTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewDeploymentCheckTask.ftl"/>
 	</taskType>
+	
+	<taskType key="ZendServerRollbackTask" name="Zend Server Rollback Task" class="com.zend.zendserver.bamboo.RollbackTask">
+  		<description>Roll back app to last working version</description>
+  		<category name="deployment"/>
+  		<resource type="download" name="icon" location="images/zend_logo.png"/>
+  		<configuration class="com.zend.zendserver.bamboo.RollbackTaskConfigurator"/>
+  		<resource type="freemarker" name="edit" location="editRollbackTask.ftl"/>
+      	<resource type="freemarker" name="view" location="viewRollbackTask.ftl"/>
+	</taskType>
   	
     <capabilityType key="system.zswa-client.executable" name="Zend Server Web API Client" class="com.zend.zendserver.bamboo.ZendServerWebApiClientCapability" sortOrder="2000">
 		<description>The Zend Server Web API Client capability type</description>

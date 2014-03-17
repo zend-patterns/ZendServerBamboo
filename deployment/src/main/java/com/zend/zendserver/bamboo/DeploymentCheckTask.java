@@ -3,9 +3,6 @@ package com.zend.zendserver.bamboo;
 import java.io.File;
 import java.util.Iterator;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollationService;
 import com.atlassian.bamboo.build.test.TestCollectionResult;
@@ -28,8 +25,6 @@ import com.zend.zendserver.bamboo.Process.ApplicationGetDetailsProcess;
 import com.zend.zendserver.bamboo.Process.DeploymentProcess;
 import com.zend.zendserver.bamboo.Process.ExecutableHelper;
 import com.zend.zendserver.bamboo.Process.ProcessHandler;
-import com.zend.zendserver.bamboo.Process.RollbackProcess;
-import com.zend.zendserver.bamboo.TaskResult.ResultParserDeploymentCheck;
 import com.zend.zendserver.bamboo.TaskResult.ResultParserInstallApp;
 
 public class DeploymentCheckTask implements CommonTaskType, TaskType {
@@ -41,6 +36,8 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
     
     private final ProcessService processService;
     private BuildLogger buildLogger;
+    
+    private TaskContext taskContext = null;
 
     public DeploymentCheckTask(final TestCollationService testCollationService, final ProcessService processService, final CapabilityContext capabilityContext)
     {
@@ -64,6 +61,7 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 	}
 
 	public TaskResult execute(TaskContext taskContext) throws TaskException {
+		this.taskContext = taskContext;
 		TaskResultBuilder builder = TaskResultBuilder.newBuilder(taskContext);
 		buildLogger = taskContext.getBuildLogger();
 		buildLogger.addBuildLogEntry("Preparing test runs (in Bamboo-Build context).");
@@ -73,7 +71,7 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 		return doExecute((CommonTaskContext) taskContext, build, builder, taskContext.getConfigurationMap());
 	}
 	
-	public TaskResult doExecute(CommonTaskContext taskContext, BuildEnv buildEnv, TaskResultBuilder builder, ConfigurationMap configMap) {
+	public TaskResult doExecute(CommonTaskContext commonTaskContext, BuildEnv buildEnv, TaskResultBuilder builder, ConfigurationMap configMap) {
 
 		try {
 			Thread.sleep(5000);
@@ -116,7 +114,7 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 					File resultFileAbsolute = new File(applicationGetDetailsProcessHandler.getOutputFilename());
 					if (check == null) {
 						testCollationService.collateTestResults(
-								(TaskContext) taskContext, 
+								(TaskContext) commonTaskContext, 
 								resultFileAbsolute.getName(), 
 								new DeploymentCheckReportCollector(this, buildLogger));
 					}
@@ -159,47 +157,12 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 					try {
 						buildLogger.addErrorLogEntry("Deployment FAILED! Initializing ROLLBACK.");
 	
-						RollbackProcess rollbackProcess = new RollbackProcess(configMap, eh);
-						rollbackProcess.setApplicationId(applicationId);
-						ProcessHandler rollbackProcessHandler = new ProcessHandler(rollbackProcess, buildLogger);
-						rollbackProcessHandler.setBuildEnv(buildEnv);
-						
-						buildLogger.addErrorLogEntry("Rolling back Application " + applicationId);
-						rollbackProcessHandler.execute();
-						
-						int itRollback = 0;
-						Boolean isRollingback = true;
-						do {
-							itRollback++;
-							buildLogger.addBuildLogEntry("Waiting for successful rollback (Iteration " + itRollback + " of " + retry + ")");
-							if (itRollback > 1) {
-								Thread.sleep(waittime * 1000);
-							}
-							applicationGetDetailsProcess.setApplicationId(applicationId);
-							applicationGetDetailsProcessHandler = new ProcessHandler(applicationGetDetailsProcess, buildLogger);
-							applicationGetDetailsProcessHandler.setBuildEnv(buildEnv);
-							applicationGetDetailsProcess.incTestIteration();
-							applicationGetDetailsProcessHandler.execute();
-							
-							ResultParserDeploymentCheck parser = new ResultParserDeploymentCheck(applicationGetDetailsProcessHandler.getOutputFilename());
-							NodeList servers = parser.getNodeListServer();
-							for (int i = 0; i < servers.getLength() - 1; i++) {
-								Element serverInfo = (Element) servers.item(i);
-								String id = parser.getValue(serverInfo, "id");
-								String status = parser.getValue(serverInfo, "status");
-								if (status.equals("deployed")) { 
-									String deployedVersion = parser.getValue(serverInfo, "deployedVersion");
-									buildLogger.addErrorLogEntry("Server " + id + " - version of current App installed: " + deployedVersion);
-									isRollingback = false;
-								}
-							}
-						} while(isRollingback && itRollback <= retry);
-						if (isRollingback && itRollback >= retry) {
-							buildLogger.addErrorLogEntry("Rollback FAILED! Please check application status in Zend Server UI!");
-							builder.failed();
+						RollbackTask rollbackTask = new RollbackTask(processService, capabilityContext);
+						if (taskContext != null) {
+							rollbackTask.execute(taskContext);
 						}
 						else {
-							buildLogger.addErrorLogEntry("Rollback succeeded!");
+							rollbackTask.execute(commonTaskContext);
 						}
 					}
 					catch (Exception e) {

@@ -36,7 +36,6 @@ public class ProcessHandler {
 		ExternalProcessBuilder epb = new ExternalProcessBuilder()
 			.command(process.getCommandList())
 			.handler(processHandler);
-		
 		return epb;
 	}
 	
@@ -77,10 +76,8 @@ public class ProcessHandler {
 		filename.append(buildEnv.getVersion());
 
 		filename.append(process.getOutputFileSuffix());
-		
 		File dir = new File(new File(filename.toString()).getParent());
 		dir.mkdirs();
-		
 		return filename.toString();
 	}
 }
