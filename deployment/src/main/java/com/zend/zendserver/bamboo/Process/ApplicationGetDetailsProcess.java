@@ -3,9 +3,7 @@ package com.zend.zendserver.bamboo.Process;
 import java.util.Arrays;
 import java.util.List;
 
-
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.task.TaskContext;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 
 public class ApplicationGetDetailsProcess implements Process {

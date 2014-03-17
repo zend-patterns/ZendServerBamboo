@@ -3,10 +3,7 @@ package com.zend.zendserver.bamboo.Process;
 import java.util.Arrays;
 import java.util.List;
 
-
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.task.TaskContext;
-import com.zend.zendserver.bamboo.Env.Build;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 
 public class PackagingProcess implements Process {
@@ -14,13 +11,11 @@ public class PackagingProcess implements Process {
 	public static final String OUTPUT_FILE_PREFIX = "zwsa/pack-";
 	public static final String OUTPUT_FILE_SUFFIX = ".log";
 	
-	private final ConfigurationMap configMap;
 	private final ExecutableHelper executableHelper;
 	private BuildEnv buildEnv;
 	
 	public PackagingProcess(ConfigurationMap configMap, ExecutableHelper executableHelper)
     {
-		this.configMap = configMap;
 		this.executableHelper = executableHelper;
     }
 	
