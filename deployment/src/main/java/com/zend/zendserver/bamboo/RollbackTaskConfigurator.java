@@ -3,14 +3,11 @@ package com.zend.zendserver.bamboo;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.atlassian.bamboo.collections.ActionParametersMap;
 import com.atlassian.bamboo.task.AbstractTaskConfigurator;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.utils.error.ErrorCollection;
-//import com.opensymphony.xwork.TextProvider;
 import com.atlassian.struts.TextProvider;
 
 public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
@@ -18,9 +15,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
 	public ErrorCollection errorCollection;
 	public TextProvider textProvider;
 
-    @NotNull
-    @Override
-    public Map<String, String> generateTaskConfigMap(@NotNull final ActionParametersMap params, @Nullable final TaskDefinition previousTaskDefinition)
+    public Map<String, String> generateTaskConfigMap(final ActionParametersMap params, final TaskDefinition previousTaskDefinition)
     {
         final Map<String, String> context = super.generateTaskConfigMap(params, previousTaskDefinition);
 
@@ -37,8 +32,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         return context;
     }
 
-    @Override
-    public void populateContextForCreate(@NotNull final Map<String, Object> context)
+    public void populateContextForCreate(final Map<String, Object> context)
     {
         super.populateContextForCreate(context);
 
@@ -52,8 +46,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("waittime", "10");
     }
 
-    @Override
-    public void populateContextForEdit(@NotNull final Map<String, Object> context, @NotNull final TaskDefinition taskDefinition)
+    public void populateContextForEdit(final Map<String, Object> context, final TaskDefinition taskDefinition)
     {
         super.populateContextForEdit(context, taskDefinition);
         
@@ -67,8 +60,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("waittime", taskDefinition.getConfiguration().get("waittime"));
     }
 
-    @Override
-    public void populateContextForView(@NotNull final Map<String, Object> context, @NotNull final TaskDefinition taskDefinition)
+    public void populateContextForView(final Map<String, Object> context, final TaskDefinition taskDefinition)
     {
         super.populateContextForView(context, taskDefinition);
         
@@ -81,8 +73,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("waittime", taskDefinition.getConfiguration().get("waittime"));
     }
 
-    @Override
-    public void validate(@NotNull final ActionParametersMap params, @NotNull final ErrorCollection errorCollection)
+    public void validate(final ActionParametersMap params, final ErrorCollection errorCollection)
     {
         super.validate(params, errorCollection);
         
