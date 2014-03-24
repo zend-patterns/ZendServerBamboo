@@ -104,7 +104,7 @@ public class RollbackTask extends BaseTask implements CommonTaskType, TaskType {
 						isRollingback = false;
 					}
 				}
-			} while(isRollingback && itRollback <= retry);
+			} while(isRollingback && itRollback < retry);
 			
 			if (isRollingback && itRollback >= retry) {
 				buildLogger.addErrorLogEntry("Rollback FAILED! Please check application status in Zend Server UI!");
