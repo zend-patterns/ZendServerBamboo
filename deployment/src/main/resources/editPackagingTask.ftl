@@ -1,1 +1,0 @@
-[@ww.textfield labelKey="Package (ZPK) name" name="zpk_name" required='true'/]
