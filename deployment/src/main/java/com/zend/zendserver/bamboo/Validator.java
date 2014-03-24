@@ -8,7 +8,8 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 import com.atlassian.bamboo.collections.ActionParametersMap;
 import com.atlassian.bamboo.utils.error.ErrorCollection;
-import com.opensymphony.xwork.TextProvider;
+//import com.opensymphony.xwork.TextProvider;
+import com.atlassian.struts.TextProvider;
 
 public class Validator {
 	public TextProvider textProvider;

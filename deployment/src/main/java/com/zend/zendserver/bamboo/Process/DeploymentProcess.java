@@ -1,13 +1,10 @@
 package com.zend.zendserver.bamboo.Process;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-
-import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.ConfigurationMap;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 

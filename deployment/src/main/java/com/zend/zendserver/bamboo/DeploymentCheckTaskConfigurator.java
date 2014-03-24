@@ -10,7 +10,8 @@ import com.atlassian.bamboo.collections.ActionParametersMap;
 import com.atlassian.bamboo.task.AbstractTaskConfigurator;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.utils.error.ErrorCollection;
-import com.opensymphony.xwork.TextProvider;
+//import com.opensymphony.xwork.TextProvider;
+import com.atlassian.struts.TextProvider;
 
 public class DeploymentCheckTaskConfigurator extends AbstractTaskConfigurator {
 	private Validator validator = new Validator();
