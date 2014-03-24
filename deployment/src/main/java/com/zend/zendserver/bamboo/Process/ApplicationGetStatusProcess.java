@@ -13,6 +13,9 @@ public class ApplicationGetStatusProcess implements Process {
 	
 	private final ConfigurationMap configMap;
 	private final ExecutableHelper executableHelper;
+	private BuildEnv buildEnv;
+	
+	private static int testIteration = 0;
 	
 	public ApplicationGetStatusProcess(ConfigurationMap configMap, ExecutableHelper executableHelper)
     {
@@ -32,14 +35,23 @@ public class ApplicationGetStatusProcess implements Process {
 		return commandList;
 	}
 
+	public void incTestIteration() {
+		testIteration++;
+	}
+	
 	public String getOutputFilePrefix() {
 		return OUTPUT_FILE_PREFIX;
 	}
 
 	public String getOutputFileSuffix() {
-		return "-" + OUTPUT_FILE_SUFFIX;
+		return "-" + String.valueOf(testIteration) + OUTPUT_FILE_SUFFIX;
 	}
 
 	public void setBuildEnv(BuildEnv buildEnv) {
+		this.buildEnv = buildEnv;
+	}
+	
+	public BuildEnv getBuildEnv() {
+		return buildEnv;
 	}
 }

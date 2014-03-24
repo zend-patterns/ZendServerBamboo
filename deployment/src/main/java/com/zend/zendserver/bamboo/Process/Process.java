@@ -8,5 +8,6 @@ public interface Process {
 	public String getOutputFilePrefix();
 	public String getOutputFileSuffix();
 	public void setBuildEnv(BuildEnv buildEnv);
+	public BuildEnv getBuildEnv();
 	public List<String> getCommandList() throws Exception;
 }

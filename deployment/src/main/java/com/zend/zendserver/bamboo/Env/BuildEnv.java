@@ -1,7 +1,5 @@
 package com.zend.zendserver.bamboo.Env;
 
-import com.atlassian.bamboo.build.logger.BuildLogger;
-
 public interface BuildEnv {
 	public String getVersion() throws Exception;
 	public String getWorkingDir();

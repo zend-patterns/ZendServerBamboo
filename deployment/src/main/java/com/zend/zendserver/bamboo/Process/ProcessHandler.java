@@ -2,17 +2,14 @@ package com.zend.zendserver.bamboo.Process;
 
 import java.io.File;
 
-
 import com.atlassian.bamboo.build.logger.BuildLogger;
-import com.atlassian.bamboo.task.TaskContext;
 import com.atlassian.utils.process.ExternalProcess;
 import com.atlassian.utils.process.ExternalProcessBuilder;
 import com.atlassian.utils.process.PluggableProcessHandler;
-import com.zend.zendserver.bamboo.Env.Build;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 
 public class ProcessHandler {
-	private Process process;
+	public Process process;
 	private ExternalProcess externalProcess;
 	private PluggableProcessHandler processHandler;
 	private BuildLogger buildLogger;
@@ -42,15 +39,15 @@ public class ProcessHandler {
 	public void execute() {
 		try {
 			OutputHandler outputHandler = new OutputHandler(processHandler, getOutputFilename(), buildLogger);
-			ExternalProcessBuilder pb = getProcessBuilder();
-			externalProcess = pb.build();
+			process.getCommandList();
+			externalProcess = getProcessBuilder().build();
 			externalProcess.execute();
-			
 			buildLogger.addBuildLogEntry("Process command line: " + externalProcess.getCommandLine());
 	        
 	        outputHandler.write();
 		}
 		catch (Exception e) {
+			buildLogger.addErrorLogEntry("Exception in ProcessHandler.execute function");
 			buildLogger.addErrorLogEntry(e.getMessage());
 			failed = true;
 		}
@@ -66,6 +63,10 @@ public class ProcessHandler {
 	
 	public void setBuildEnv(BuildEnv buildEnv) {
 		this.buildEnv = buildEnv;
+	}
+	
+	public BuildEnv getBuildEnv() {
+		return buildEnv;
 	}
 	
 	public String getOutputFilename() throws Exception {

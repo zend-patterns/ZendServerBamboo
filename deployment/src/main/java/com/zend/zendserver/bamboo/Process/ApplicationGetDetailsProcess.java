@@ -13,6 +13,7 @@ public class ApplicationGetDetailsProcess implements Process {
 	
 	private final ConfigurationMap configMap;
 	private final ExecutableHelper executableHelper;
+	private BuildEnv buildEnv;
 	private String applicationId;
 	
 	private static int testIteration = 0;
@@ -53,5 +54,10 @@ public class ApplicationGetDetailsProcess implements Process {
 	}
 
 	public void setBuildEnv(BuildEnv buildEnv) {
+		this.buildEnv = buildEnv;
+	}
+	
+	public BuildEnv getBuildEnv() {
+		return buildEnv;
 	}
 }

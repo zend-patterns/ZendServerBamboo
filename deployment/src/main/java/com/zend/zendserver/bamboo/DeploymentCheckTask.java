@@ -7,7 +7,6 @@ import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollationService;
 import com.atlassian.bamboo.build.test.TestCollectionResult;
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.process.ProcessService;
 import com.atlassian.bamboo.results.tests.TestResults;
 import com.atlassian.bamboo.task.CommonTaskContext;
 import com.atlassian.bamboo.task.CommonTaskType;
@@ -21,29 +20,23 @@ import com.atlassian.bamboo.v2.build.agent.capability.CapabilityContext;
 import com.zend.zendserver.bamboo.Env.Build;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 import com.zend.zendserver.bamboo.Env.Deploy;
-import com.zend.zendserver.bamboo.Process.ApplicationGetDetailsProcess;
-import com.zend.zendserver.bamboo.Process.DeploymentProcess;
-import com.zend.zendserver.bamboo.Process.ExecutableHelper;
 import com.zend.zendserver.bamboo.Process.ProcessHandler;
 import com.zend.zendserver.bamboo.TaskResult.ResultParserInstallApp;
 
-public class DeploymentCheckTask implements CommonTaskType, TaskType {
-	private TestCollationService testCollationService;
+public class DeploymentCheckTask extends BaseTask implements CommonTaskType, TaskType {
 	private Boolean isDeploying; 
 	private DeploymentCheckReportCollector check = null;
 	
-	private CapabilityContext capabilityContext;
-    
-    private final ProcessService processService;
     private BuildLogger buildLogger;
     
     private TaskContext taskContext = null;
 
-    public DeploymentCheckTask(final TestCollationService testCollationService, final ProcessService processService, final CapabilityContext capabilityContext)
+    public DeploymentCheckTask(
+    		final TestCollationService testCollationService, 
+    		final com.atlassian.bamboo.process.ProcessService processService, 
+    		final CapabilityContext capabilityContext)
     {
-    	this.testCollationService = testCollationService;
-        this.processService = processService;
-        this.capabilityContext = capabilityContext;
+    	super(testCollationService, processService, capabilityContext);
     }
     
     public TaskResult execute(CommonTaskContext commonTaskContext)
@@ -54,10 +47,11 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 		buildLogger.addBuildLogEntry("Preparing test runs (in Bamboo-Deploy context).");
 		
 		Deploy deploy = new Deploy(commonTaskContext);
+		init(commonTaskContext, deploy);
 		
 		check = new DeploymentCheckReportCollector(this, buildLogger);
 		
-		return doExecute(commonTaskContext, deploy, builder,commonTaskContext.getConfigurationMap()); 
+		return doExecute(commonTaskContext, deploy, builder, commonTaskContext.getConfigurationMap()); 
 	}
 
 	public TaskResult execute(TaskContext taskContext) throws TaskException {
@@ -67,6 +61,7 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 		buildLogger.addBuildLogEntry("Preparing test runs (in Bamboo-Build context).");
 		
 		Build build = new Build(taskContext);
+		init(taskContext, build);
 		
 		return doExecute((CommonTaskContext) taskContext, build, builder, taskContext.getConfigurationMap());
 	}
@@ -79,21 +74,11 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 		catch (Exception e) {}
 		
 		builder.success();
-
-		ExecutableHelper eh = new ExecutableHelper(capabilityContext); 
-		ApplicationGetDetailsProcess applicationGetDetailsProcess = new ApplicationGetDetailsProcess(configMap, eh);
-		ProcessHandler applicationGetDetailsProcessHandler;
-		
-		DeploymentProcess deployProcess = new DeploymentProcess(configMap);
-		deployProcess.setBuildEnv(buildEnv);
-		ProcessHandler deployProcessHandler = new ProcessHandler(deployProcess, buildLogger);
-		deployProcessHandler.setBuildEnv(buildEnv);
 		
 		ResultParserInstallApp resultParserInstallApp;
 		try {
-			resultParserInstallApp = new ResultParserInstallApp(deployProcessHandler.getOutputFilename(), buildLogger);
+			resultParserInstallApp = new ResultParserInstallApp(processHandlerService.deployment().getOutputFilename(), buildLogger);
 			String applicationId = resultParserInstallApp.getApplicationId();
-			applicationGetDetailsProcess.setApplicationId(applicationId);
 			
 			int retry = Integer.parseInt(configMap.get("retry"));
 			int waittime = Integer.parseInt(configMap.get("waittime"));
@@ -106,12 +91,13 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 					if (it > 1) {
 						Thread.sleep(waittime * 1000);
 					}
-					applicationGetDetailsProcessHandler = new ProcessHandler(applicationGetDetailsProcess, buildLogger);
-					applicationGetDetailsProcessHandler.setBuildEnv(buildEnv);
-					applicationGetDetailsProcess.incTestIteration();
-					applicationGetDetailsProcessHandler.execute();
+					
+					ProcessHandler applicationGetDetails = processHandlerService.applicationGetDetails(applicationId);
+					applicationGetDetails.execute();
+					
 
-					File resultFileAbsolute = new File(applicationGetDetailsProcessHandler.getOutputFilename());
+					buildLogger.addErrorLogEntry("+++ out " + applicationGetDetails.getOutputFilename());
+					File resultFileAbsolute = new File(applicationGetDetails.getOutputFilename());
 					if (check == null) {
 						testCollationService.collateTestResults(
 								(TaskContext) commonTaskContext, 
@@ -157,7 +143,7 @@ public class DeploymentCheckTask implements CommonTaskType, TaskType {
 					try {
 						buildLogger.addErrorLogEntry("Deployment FAILED! Initializing ROLLBACK.");
 	
-						RollbackTask rollbackTask = new RollbackTask(processService, capabilityContext);
+						RollbackTask rollbackTask = new RollbackTask(bambooProcessService, capabilityContext);
 						if (taskContext != null) {
 							rollbackTask.execute(taskContext);
 						}

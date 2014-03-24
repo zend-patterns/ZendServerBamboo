@@ -12,12 +12,15 @@ public class Build implements BuildEnv {
 	}
 	
 	public String getRevision() {
+		String revision = "norev";
 		Object[] repositoryIds = taskContext.getBuildContext().getRelevantRepositoryIds().toArray();
-        Long repositoryId = Long.valueOf(String.valueOf(repositoryIds[0]));
-        
-        String revision = taskContext.getBuildContext().getBuildChanges().getVcsRevisionKey(repositoryId);
-        revision = revision.substring(0, 6);
-        return revision;
+		if (repositoryIds.length > 0) {
+			Long repositoryId = Long.valueOf(String.valueOf(repositoryIds[0]));
+			revision = taskContext.getBuildContext().getBuildChanges().getVcsRevisionKey(repositoryId);
+			revision = revision.substring(0, 6);
+		}
+			
+		return revision;
 	}
 	
 	public String getBuildNr() {

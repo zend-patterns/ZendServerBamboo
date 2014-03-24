@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.task.CommonTaskContext;
-import com.atlassian.bamboo.task.TaskContext;
 
 public class Deploy implements BuildEnv {
 	private CommonTaskContext taskContext;

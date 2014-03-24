@@ -40,6 +40,10 @@ public class DeploymentProcess implements Process {
 		this.buildEnv = buildEnv;
 	}
 	
+	public BuildEnv getBuildEnv() {
+		return buildEnv;
+	}
+	
 	public List<String> getCommandList() throws Exception {
 		List<String> commandList = new ArrayList<String>();
 		

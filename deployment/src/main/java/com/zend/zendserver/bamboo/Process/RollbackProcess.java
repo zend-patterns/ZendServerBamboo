@@ -3,9 +3,7 @@ package com.zend.zendserver.bamboo.Process;
 import java.util.Arrays;
 import java.util.List;
 
-
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.task.TaskContext;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 
 public class RollbackProcess implements Process {
@@ -16,6 +14,8 @@ public class RollbackProcess implements Process {
 	private final ConfigurationMap configMap;
 	private final ExecutableHelper executableHelper;
 	private String applicationId;
+	
+	private BuildEnv buildEnv;
 	
 	public RollbackProcess(ConfigurationMap configMap, ExecutableHelper executableHelper)
     {
@@ -49,5 +49,10 @@ public class RollbackProcess implements Process {
 	}
 
 	public void setBuildEnv(BuildEnv buildEnv) {
+		this.buildEnv = buildEnv;
+	}
+	
+	public BuildEnv getBuildEnv() {
+		return buildEnv;
 	}
 }
