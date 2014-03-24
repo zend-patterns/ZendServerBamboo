@@ -95,8 +95,6 @@ public class DeploymentCheckTask extends BaseTask implements CommonTaskType, Tas
 					ProcessHandler applicationGetDetails = processHandlerService.applicationGetDetails(applicationId);
 					applicationGetDetails.execute();
 					
-
-					buildLogger.addErrorLogEntry("+++ out " + applicationGetDetails.getOutputFilename());
 					File resultFileAbsolute = new File(applicationGetDetails.getOutputFilename());
 					if (check == null) {
 						testCollationService.collateTestResults(
