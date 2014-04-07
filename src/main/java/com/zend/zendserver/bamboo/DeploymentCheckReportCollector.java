@@ -34,6 +34,8 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 		Collection<TestResults> successfulTestResults = Lists.newArrayList();
         Collection<TestResults> failingTestResults = Lists.newArrayList();
 		
+        TestResults testResults;
+        
         try {
         	
         	parser = new ResultParserDeploymentCheck(file.getAbsolutePath());
@@ -47,7 +49,6 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 				String status = parser.getValue(serverInfo, "status");
 				
 				buildLogger.addBuildLogEntry("Server " + id + " has status " + status);
-				TestResults testResults;
 				
 				if (status.equals("uploadError") ||
 					status.equals("stageError") ||
@@ -75,12 +76,12 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 						if (status.equals("OK") ||
 							status.equals("deployed")) 
 						{
-							testResults = new TestResults(id, getTestSuccessDescription(serverInfo), "");
+							testResults = new TestResults("Server Status " + id, getTestSuccessDescription(serverInfo), "");
 							testResults.setState(TestState.SUCCESS);
 							successfulTestResults.add(testResults);
 						}						
 						else {
-							testResults = new TestResults(id, getTestErrorDescription(serverInfo), "");
+							testResults = new TestResults("Server Status " + id, getTestErrorDescription(serverInfo), "");
 							testResults.setState(TestState.FAILED);
 							failingTestResults.add(testResults);
 						}
@@ -88,8 +89,12 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 				}
 			}
 
-		} catch (Exception ex4) {
-			buildLogger.addErrorLogEntry("Exception: " + ex4.getMessage());
+		} catch (Exception ex) {
+			buildLogger.addErrorLogEntry("Exception: " + ex.getMessage());
+			TestResults testResultsEx = new TestResults("Exception", ex.getMessage(), "");
+			testResultsEx.setState(TestState.FAILED);
+			failingTestResults.add(testResultsEx);
+			builder.addFailedTestResults(failingTestResults);
 		}
         
         return builder
@@ -122,12 +127,12 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 		String status = parser.getValue(serverInfo, "status");
 		String serverId = parser.getValue(serverInfo, "id");
 		
-		String placeholder = "Server %s - Status: %s; Error: %s; Deployed Version: %s";
+		String placeholder = "Status: %s; Error: %s; Deployed Version: %s (Server %s)";
         String description = String.format(placeholder,
-        		serverId,
         		status,
         		error,
-        		deployedVersion);
+        		deployedVersion,
+        		serverId);
 		return  description;
 	}
 	
@@ -137,11 +142,11 @@ public class DeploymentCheckReportCollector implements TestReportCollector {
 		String status = parser.getValue(serverInfo, "status");
 		String serverId = parser.getValue(serverInfo, "id");
 		
-		String placeholder = "Server %s - Status: %s; Deployed Version: %s";
+		String placeholder = "Status: %s; Deployed Version: %s (Server %s)";
         String description = String.format(placeholder,
-        		serverId,
         		status,
-        		deployedVersion);
+        		deployedVersion,
+        		serverId);
 		return  description;
 	}
 }

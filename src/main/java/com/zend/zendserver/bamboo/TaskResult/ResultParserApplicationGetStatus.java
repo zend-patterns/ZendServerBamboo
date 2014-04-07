@@ -20,26 +20,22 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 		this.buildLogger = buildLogger;
 	}
 	
-	public String getApplicationId(String applicationName) {
+	public String getApplicationId(String applicationName) throws Exception {
 		String id = null;
-		try {
-			Element responseData = getNodeResponseData();
-			Element applicationsList = getNode(responseData, "applicationsList");
-			
-			NodeList applicationInfoList = applicationsList.getElementsByTagName("applicationInfo");
-			for (int i = 0; i < applicationInfoList.getLength(); i++) {
-		        Element applicationInfo = (Element) applicationInfoList.item(i);
-		        if (getValue(applicationInfo, "userAppName").equals(applicationName)) {
-					id = getValue(applicationInfo, "id");
-					break;
-				}
-		    }
+		Element responseData = getNodeResponseData();
+		Element applicationsList = getNode(responseData, "applicationsList");
+		
+		NodeList applicationInfoList = applicationsList.getElementsByTagName("applicationInfo");
+		for (int i = 0; i < applicationInfoList.getLength(); i++) {
+	        Element applicationInfo = (Element) applicationInfoList.item(i);
+	        if (getValue(applicationInfo, "userAppName").equals(applicationName)) {
+				id = getValue(applicationInfo, "id");
+				break;
+			}
+	    }
 
-			if (id == null) throw new Exception("id not found for application " + applicationName);
-		}
-		catch (Exception e) {
-			buildLogger.addErrorLogEntry("Exception: " + e.getMessage());
-		}
+		if (id == null) throw new Exception("id not found for application " + applicationName);
+
 		return id;
 	}
 }

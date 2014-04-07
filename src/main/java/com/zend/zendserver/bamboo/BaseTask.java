@@ -1,7 +1,12 @@
 package com.zend.zendserver.bamboo;
 
+import java.awt.Event;
+import java.util.Iterator;
+
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollationService;
+import com.atlassian.bamboo.build.test.TestCollectionResult;
+import com.atlassian.bamboo.results.tests.TestResults;
 import com.atlassian.bamboo.task.CommonTaskContext;
 import com.atlassian.bamboo.task.TaskContext;
 import com.atlassian.bamboo.v2.build.agent.capability.CapabilityContext;
@@ -19,6 +24,8 @@ abstract public class BaseTask {
 	protected BuildLogger buildLogger;
 	protected ProcessService processService;
 	protected ProcessHandlerService processHandlerService;
+	protected EventListener errorCollatorListener;
+	protected Tests tests;
 
 	public BaseTask(
 		final com.atlassian.bamboo.process.ProcessService bambooProcessService, 
@@ -58,6 +65,12 @@ abstract public class BaseTask {
 		processHandlerService.setProcessService(processService);
 		processHandlerService.setBuildEnv(buildEnv);
 		processHandlerService.setBuildLogger(buildLogger);
+		
+		errorCollatorListener = getDeployErrorCollator();
+		errorCollatorListener.setCommonTaskContext(commonTaskContext);
+		
+		tests = new Tests();
+		tests.setListener(errorCollatorListener);
 	}
 	
 	public void init(TaskContext taskContext, BuildEnv buildEnv) {
@@ -72,5 +85,49 @@ abstract public class BaseTask {
 		processHandlerService.setProcessService(processService);
 		processHandlerService.setBuildEnv(buildEnv);
 		processHandlerService.setBuildLogger(buildLogger);
+		
+		errorCollatorListener = getBuildErrorCollator();
+		errorCollatorListener.setTaskContext(taskContext);
+		
+		tests = new Tests();
+		tests.setListener(errorCollatorListener);
+	}
+	
+	protected EventListener getBuildErrorCollator() {
+		return new EventListener() {
+			@Override
+			public void fireEvent(Event e) {
+				testCollationService.collateTestResults(
+						taskContext, 
+						resultFile.getName(), 
+						testReportCollector);
+				getBuilder().checkTestFailures();
+			}
+		};
+	}
+	
+	protected EventListener getDeployErrorCollator() {
+		return new EventListener() {
+			@Override
+			public void fireEvent(Event e) throws Exception {
+				TestCollectionResult result = testReportCollector.collect(resultFile);
+				Iterator<TestResults> failIterator = result.getFailedTestResults().iterator();
+				if (failIterator.hasNext()) {
+					buildLogger.addErrorLogEntry("Test error messages:");
+					while (failIterator.hasNext()) {
+						builder.failed();
+						buildLogger.addErrorLogEntry(failIterator.next().getActualMethodName());
+					}
+				}
+				
+				Iterator<TestResults> successIterator = result.getSuccessfulTestResults().iterator();
+				if (failIterator.hasNext()) {
+					buildLogger.addBuildLogEntry("Test success messages:");
+					while (successIterator.hasNext()) {
+						buildLogger.addBuildLogEntry(successIterator.next().toString());
+					}
+				}
+			}
+		};
 	}
 }
