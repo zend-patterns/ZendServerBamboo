@@ -29,7 +29,9 @@ public class RollbackProcess implements Process {
 	
 	public List<String> getCommandList() throws Exception {
 		List<String> commandList = Arrays.asList(
-				executableHelper.getExecutable(),
+				//executableHelper.getExecutable(),
+				"/usr/bin/php",
+				"/home/jan/code/ZendServerSDK/bin/zs-client.php",
 				"applicationRollback",
 				"--appId=" + applicationId,
 				"--zsurl=" + configMap.get("zs_url"),

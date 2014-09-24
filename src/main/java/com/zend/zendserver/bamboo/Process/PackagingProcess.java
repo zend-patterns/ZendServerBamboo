@@ -28,7 +28,9 @@ public class PackagingProcess implements Process {
 	
 	public List<String> getCommandList() throws Exception {
 		List<String> commandList = Arrays.asList(
-				executableHelper.getExecutable(),
+				//executableHelper.getExecutable(),
+				"/usr/bin/php",
+				"/home/jan/code/ZendServerSDK/bin/zs-client.php",
 				"packZpk",
 				"--folder=" + buildEnv.getWorkingDir(),
 				"--destination=" + buildEnv.getZpkDir(),

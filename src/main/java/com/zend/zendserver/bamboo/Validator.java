@@ -1,7 +1,7 @@
 package com.zend.zendserver.bamboo;
 
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -46,15 +46,10 @@ public class Validator {
 				throw new Exception(textProvider.getText("com.zend.zendserver.plugins.base_url.error"));// errorCollection.addError("zs_url", textProvider.getText("com.zend.zendserver.plugins.zs_url.error"));
 			}
 			
-			if (urlValue.substring(0, 4).equals("http")) {
-	    
-				URL url = new URL(urlValue);
-				URLConnection conn = url.openConnection();
-				conn.setConnectTimeout(10000);
-				conn.connect();
-			}
-			else if (!urlValue.substring(0, 1).equals("/")) {
-				throw new Exception(textProvider.getText("com.zend.zendserver.plugins.base_url.invalid"));
+			Pattern urlPattern = Pattern.compile("(https?://[\\w\\d\\.]+\\w+((:)(\\d){2,5})?/?([\\w\\d]+/?)*|/([\\w\\d]+/?)*)", Pattern.CASE_INSENSITIVE);
+		    Matcher matcher = urlPattern.matcher(urlValue);
+		    if (!matcher.matches()) {
+		    	throw new Exception(textProvider.getText("com.zend.zendserver.plugins.base_url.invalid"));
 			}
 	    } catch (Exception e) {
 	    	errorCollection.addError("base_url", e.getMessage());
@@ -70,10 +65,11 @@ public class Validator {
 				throw new Exception(textProvider.getText("com.zend.zendserver.plugins.zs_url.error"));// errorCollection.addError("zs_url", textProvider.getText("com.zend.zendserver.plugins.zs_url.error"));
 			}
 	    
-	        URL url = new URL(urlValue);
-	        URLConnection conn = url.openConnection();
-	        conn.setConnectTimeout(10000);
-	        conn.connect();
+			Pattern urlPattern = Pattern.compile("https?://[\\w\\d\\.]+\\w+((:)(\\d){2,5})?/?([\\w\\d]+/?)*", Pattern.CASE_INSENSITIVE);
+		    Matcher matcher = urlPattern.matcher(urlValue);
+		    if (!matcher.matches()) {
+		    	throw new Exception(textProvider.getText("com.zend.zendserver.plugins.zs_url.error"));
+			}
 	    } catch (Exception e) {
 	    	errorCollection.addError("zs_url", e.getMessage());
 	    }
