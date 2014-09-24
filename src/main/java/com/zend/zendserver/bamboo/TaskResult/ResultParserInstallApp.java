@@ -21,15 +21,10 @@ public class ResultParserInstallApp extends ResultParser {
 	
 	public String getApplicationId() {
 		String id = null;
-		try {
-			Element responseData = (Element) doc.getElementsByTagName("responseData").item(0);
-			Element applicationInfo = getNode(responseData, "applicationInfo");
+		Element responseData = (Element) doc.getElementsByTagName("responseData").item(0);
+		Element applicationInfo = getNode(responseData, "applicationInfo");
 			
-			id = getValue(applicationInfo, "id");
-		}
-		catch (Exception e) {
-			buildLogger.addErrorLogEntry("Exception: " + e.getMessage());
-		}
+		id = getValue(applicationInfo, "id");
 		return id;
 	}
 }

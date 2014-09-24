@@ -32,6 +32,7 @@ public class ProcessHandler {
 	protected ExternalProcessBuilder getProcessBuilder() throws Exception {
 		ExternalProcessBuilder epb = new ExternalProcessBuilder()
 			.command(process.getCommandList())
+			.env("RAW_ZS_OUTPUT", "1")
 			.handler(processHandler);
 		return epb;
 	}

@@ -1,5 +1,6 @@
 package com.zend.zendserver.bamboo;
 
+import java.awt.Event;
 import java.io.File;
 import java.util.Iterator;
 
@@ -75,6 +76,11 @@ public class DeploymentCheckTask extends BaseTask implements CommonTaskType, Tas
 		
 		builder.success();
 		
+		DeploymentCheckReportCollector deploymentCheckReportCollector = new DeploymentCheckReportCollector(this, buildLogger);
+		
+		errorCollatorListener.setBuilder(builder);
+		errorCollatorListener.setTestReportCollector(deploymentCheckReportCollector);
+		
 		ResultParserInstallApp resultParserInstallApp;
 		try {
 			resultParserInstallApp = new ResultParserInstallApp(processHandlerService.deployment().getOutputFilename(), buildLogger);
@@ -96,34 +102,14 @@ public class DeploymentCheckTask extends BaseTask implements CommonTaskType, Tas
 					applicationGetDetails.execute();
 					
 					File resultFileAbsolute = new File(applicationGetDetails.getOutputFilename());
-					if (check == null) {
-						testCollationService.collateTestResults(
-								(TaskContext) commonTaskContext, 
-								resultFileAbsolute.getName(), 
-								new DeploymentCheckReportCollector(this, buildLogger));
-					}
-					else {
-						TestCollectionResult result = check.collect(resultFileAbsolute);
-						Iterator<TestResults> failIterator = result.getFailedTestResults().iterator();
-						if (failIterator.hasNext()) {
-							buildLogger.addErrorLogEntry("Test error messages:");
-							while (failIterator.hasNext()) {
-								builder.failed();
-								buildLogger.addErrorLogEntry(failIterator.next().getActualMethodName());
-							}
-						}
-						
-						Iterator<TestResults> successIterator = result.getSuccessfulTestResults().iterator();
-						if (failIterator.hasNext()) {
-							buildLogger.addBuildLogEntry("Test success messages:");
-							while (successIterator.hasNext()) {
-								buildLogger.addBuildLogEntry(successIterator.next().toString());
-							}
-						}
-					}
+					
+					errorCollatorListener.setResultFile(resultFileAbsolute);
+					
+					tests.collate();
 					
 				} catch (Exception e) {
 					buildLogger.addErrorLogEntry(e.getMessage());
+					builder.failed();
 				}
 			} while(isDeploying && it <= retry);
 
@@ -151,10 +137,12 @@ public class DeploymentCheckTask extends BaseTask implements CommonTaskType, Tas
 					}
 					catch (Exception e) {
 						buildLogger.addErrorLogEntry("Exception: "+e.getMessage());
+						builder.failed();
 					}
 				}
 				else {
 					buildLogger.addErrorLogEntry("Deployment FAILED! No automatic rollback.");
+					builder.failed();
 				}
 			}
 		}

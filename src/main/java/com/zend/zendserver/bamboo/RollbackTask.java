@@ -116,6 +116,7 @@ public class RollbackTask extends BaseTask implements CommonTaskType, TaskType {
 		}
 		catch (Exception e) {
 			buildLogger.addErrorLogEntry("Exception: "+e.getMessage());
+			builder.failed();
 		}
 		return builder.build();
 	}
