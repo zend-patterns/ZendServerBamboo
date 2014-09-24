@@ -10,7 +10,7 @@ import com.zend.zendserver.bamboo.Env.BuildEnv;
 
 public class DeploymentProcess implements Process {
 	
-	public static final String OUTPUT_FILE_PREFIX = "installApp-";
+	public static final String OUTPUT_FILE_PREFIX = "zwsa/installApp-";
 	public static final String OUTPUT_FILE_SUFFIX = ".xml";
 	
 	private final ConfigurationMap configMap;
@@ -44,9 +44,7 @@ public class DeploymentProcess implements Process {
 	public List<String> getCommandList() throws Exception {
 		List<String> commandList = new ArrayList<String>();
 		
-		//commandList.add(executableHelper.getExecutable());
-		commandList.add("/usr/bin/php");
-		commandList.add("/home/jan/code/ZendServerSDK/bin/zs-client.php");
+		commandList.add(executableHelper.getExecutable());
 		commandList.add("installApp");
 		commandList.add("--zpk=" + buildEnv.getZpkPath());
 		commandList.add("--baseUri=" + configMap.get("base_url"));
