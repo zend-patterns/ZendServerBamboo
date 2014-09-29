@@ -17,6 +17,7 @@ import com.zend.zendserver.bamboo.Env.Deploy;
 import com.zend.zendserver.bamboo.Process.ProcessHandler;
 
 public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType {
+	public static final String OUTPUT_FILE_KEY = "task.report.deployment";
 	
 	public DeploymentTask(
     		final TestCollationService testCollationService, 
@@ -66,7 +67,7 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 			if (deployment.getBuildEnv() instanceof Build) {
 				
 				final Map<String, String> customBuildData = errorCollatorListener.getTaskContext().getBuildContext().getBuildResult().getCustomBuildData();
-	            customBuildData.put("task.report.deployment", deployment.getOutputFilename());
+	            customBuildData.put(OUTPUT_FILE_KEY, deployment.getOutputFilename());
 			}
 
 			errorCollatorListener.setResultFile(resultFileDeployment);

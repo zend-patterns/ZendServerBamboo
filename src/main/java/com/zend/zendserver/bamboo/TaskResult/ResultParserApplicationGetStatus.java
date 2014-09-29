@@ -20,6 +20,11 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 		this.buildLogger = buildLogger;
 	}
 	
+	public ResultParserApplicationGetStatus(String file)
+			throws ParserConfigurationException, SAXException, IOException {
+		super(file);
+	}
+	
 	public String getApplicationId(String applicationName) throws Exception {
 		String id = null;
 		Element responseData = getNodeResponseData();
