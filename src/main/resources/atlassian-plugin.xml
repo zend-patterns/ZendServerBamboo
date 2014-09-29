@@ -10,6 +10,33 @@
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="i18n"/>
     
+    <xwork key="viewZendServerDeploymentJobs" name="Zend Server Deployment Jobs">
+        <package name="viewZendServerDeploymentJobs" extends="buildResultView">
+            <action name="ZendServerDeploymentJobs" class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentJobs">
+                <result name="success" type="freemarker">/publisher/ZendServerDeploymentJobs.ftl</result>
+            </action>
+        </package>
+    </xwork>
+    
+    <web-item key="Zend-Server-Deployment-Jobs-\${buildNumber}" name="Zend-Server-Deployment-Jobs" section="chainResults.subMenu/chainResults" weight="1">
+        <label key="Zend Server Deployment Jobs"/>
+        <link linkId="Zend-Server-Deployment-Jobs-\${buildNumber}">/build/result/ZendServerDeploymentJobs.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+    </web-item>
+    
+    <xwork key="viewZendServerDeploymentDetails" name="Zend Server Deployment Details">
+        <package name="viewZendServerDeploymentDetails" extends="buildResultView">
+            <action name="ZendServerDeploymentDetails" class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentDetails">
+                <result name="success" type="freemarker">/publisher/ZendServerDeploymentDetails.ftl</result>
+            </action>
+        </package>
+    </xwork>
+    
+    <web-item key="Zend-Server-Deployment-Details-\${buildNumber}" name="Zend-Server-Deployment-Details" section="results.subMenu/results" weight="2">
+        <label key="Zend Server Deployment Details"/>
+        <link linkId="Zend-Server-Deployment-Details-\${buildNumber}">/build/result/ZendServerDeploymentDetails.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <!--condition class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentStatisticsViewCondition"/-->
+    </web-item>
+    
     <!-- add our web resources -->
     <web-resource key="zendserver-resources" name="zendserver Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>

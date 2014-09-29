@@ -1,6 +1,7 @@
 package com.zend.zendserver.bamboo;
 
 import java.io.File;
+import java.util.Map;
 
 import com.atlassian.bamboo.build.test.TestCollationService;
 import com.atlassian.bamboo.task.CommonTaskContext;
@@ -38,10 +39,10 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 	public TaskResult execute(TaskContext taskContext) throws TaskException {
 		Build build = new Build(taskContext);
 		init(taskContext, build);
-		
+				
 		TaskResultBuilder builder = TaskResultBuilder.newBuilder(taskContext);
 		buildLogger.addBuildLogEntry("Deployment (in Bamboo-Build context) has started...");
-		
+        
 		return doExecute(builder);
 	}
 	
@@ -61,9 +62,15 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 		
 		try {
 			File resultFileDeployment = new File(deployment.getOutputFilename());
+			
+			if (deployment.getBuildEnv() instanceof Build) {
+				
+				final Map<String, String> customBuildData = errorCollatorListener.getTaskContext().getBuildContext().getBuildResult().getCustomBuildData();
+	            customBuildData.put("task.report.deployment", deployment.getOutputFilename());
+			}
 
 			errorCollatorListener.setResultFile(resultFileDeployment);
-			
+	        
 			tests.collate();
 			
 		} catch (Exception e) { 
