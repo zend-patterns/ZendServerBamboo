@@ -85,4 +85,17 @@ public class ProcessHandlerService {
 		
 		return rollbackProcessHandler;
 	}
+	
+	public ProcessHandler monitorGetIssuesListPredefinedFilter(long from, long to, boolean periodBeforeDeployment) {
+		MonitorGetIssuesListPredefinedFilterProcess process = processService.monitorGetIssuesListPredefinedFilterProcess();
+		process.setFilterId("All Issues");
+		process.setFrom(Long.toString(from));
+		process.setTo(Long.toString(to));
+		process.setPeriodBeforeDeployment(periodBeforeDeployment);
+		
+		ProcessHandler issuesListProcessHandler = new ProcessHandler(process, buildLogger);
+		issuesListProcessHandler.setBuildEnv(buildEnv);
+		
+		return issuesListProcessHandler;
+	}
 }

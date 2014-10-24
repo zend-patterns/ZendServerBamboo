@@ -15,6 +15,7 @@ public class ProcessService {
 	private DeploymentProcess deployment = null;
 	private PackagingProcess packaging = null;
 	private RollbackProcess rollback = null;
+	private MonitorGetIssuesListPredefinedFilterProcess monitorGetIssuesListPredefinedFilterProcess = null;
 	
 	public CapabilityContext getCapabilityContext() {
 		return capabilityContext;
@@ -79,5 +80,12 @@ public class ProcessService {
 		rollback.setBuildEnv(buildEnv);
 		
 		return rollback;
+	}
+	
+	public MonitorGetIssuesListPredefinedFilterProcess monitorGetIssuesListPredefinedFilterProcess() {
+		monitorGetIssuesListPredefinedFilterProcess = new MonitorGetIssuesListPredefinedFilterProcess(configMap, getExecutableHelper());
+		monitorGetIssuesListPredefinedFilterProcess.setBuildEnv(buildEnv);
+		
+		return monitorGetIssuesListPredefinedFilterProcess;
 	}
 }
