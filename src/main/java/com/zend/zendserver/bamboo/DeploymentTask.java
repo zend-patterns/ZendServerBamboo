@@ -1,7 +1,6 @@
 package com.zend.zendserver.bamboo;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.atlassian.bamboo.build.test.TestCollationService;
