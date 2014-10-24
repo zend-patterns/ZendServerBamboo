@@ -64,20 +64,27 @@ strTest += "<br>---------------------------------<br>";
     private void buildApplicationInfo() throws ParserConfigurationException, SAXException, IOException {
     	Map<String, String> metadata = this.getResultsSummary().getCustomBuildData();
     	
-    	ResultParserDeploymentCheck parser = new ResultParserDeploymentCheck(
-    		metadata.get(DeploymentCheckTask.OUTPUT_FILE_KEY)	
-        );
+    	ResultParserDeploymentCheck parser;
+		try {
+			parser = new ResultParserDeploymentCheck(
+				metadata.get(DeploymentCheckTask.OUTPUT_FILE_KEY)	
+			);
             
-    	Element applicationInfo = parser.getNodeApplicationInfo();
+	    	Element applicationInfo = parser.getNodeApplicationInfo();
+			
+			setAppId(parser.getValue(applicationInfo, "id"));
+			setAppBaseUrl(parser.getValue(applicationInfo, "baseUrl"));
+			setAppName(parser.getValue(applicationInfo, "appName"));
+			setUserAppName(parser.getValue(applicationInfo, "userAppName"));
+			setInstalledLocation(parser.getValue(applicationInfo, "installedLocation"));
+			setStatus(parser.getValue(applicationInfo, "status"));
+			setIsRollbackable(parser.getValue(applicationInfo, "isRollbackable"));
+			setIsRedeployable(parser.getValue(applicationInfo, "isRedeployable"));
 		
-		setAppId(parser.getValue(applicationInfo, "id"));
-		setAppBaseUrl(parser.getValue(applicationInfo, "baseUrl"));
-		setAppName(parser.getValue(applicationInfo, "appName"));
-		setUserAppName(parser.getValue(applicationInfo, "userAppName"));
-		setInstalledLocation(parser.getValue(applicationInfo, "installedLocation"));
-		setStatus(parser.getValue(applicationInfo, "status"));
-		setIsRollbackable(parser.getValue(applicationInfo, "isRollbackable"));
-		setIsRedeployable(parser.getValue(applicationInfo, "isRedeployable"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 	public String getAppId() {
