@@ -125,7 +125,6 @@ text-align: left;
 	</div>
 </div>
 
-### ${tmp} ###
 <div id="container" style="min-width: 300px; height: 500px; margin: 1em"></div>
 
 <table style="width: 100%" class="aui" id="buildMetadata">
