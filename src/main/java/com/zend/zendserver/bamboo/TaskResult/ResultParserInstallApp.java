@@ -13,7 +13,7 @@ public class ResultParserInstallApp extends ResultParser {
 
 	private BuildLogger buildLogger;
 	public ResultParserInstallApp(String file, BuildLogger buildLogger)
-			throws ParserConfigurationException, SAXException, IOException {
+			throws Exception {
 		super(file);
 		
 		this.buildLogger = buildLogger;

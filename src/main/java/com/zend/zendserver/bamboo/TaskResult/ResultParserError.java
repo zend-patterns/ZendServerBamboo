@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 
 public class ResultParserError extends ResultParser {
 	public ResultParserError(String file)
-			throws ParserConfigurationException, SAXException, IOException {
+			throws Exception {
 		super(file);
 	}
 	
