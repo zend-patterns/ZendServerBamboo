@@ -3,6 +3,7 @@ package com.zend.zendserver.bamboo;
 import java.awt.Event;
 import java.io.File;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollationService;
@@ -25,6 +26,8 @@ import com.zend.zendserver.bamboo.Process.ProcessHandler;
 import com.zend.zendserver.bamboo.TaskResult.ResultParserInstallApp;
 
 public class DeploymentCheckTask extends BaseTask implements CommonTaskType, TaskType {
+	public static final String OUTPUT_FILE_KEY = "task.report.deploymentCheck";
+	
 	private Boolean isDeploying; 
 	private DeploymentCheckReportCollector check = null;
 	
@@ -106,6 +109,12 @@ public class DeploymentCheckTask extends BaseTask implements CommonTaskType, Tas
 					errorCollatorListener.setResultFile(resultFileAbsolute);
 					
 					tests.collate();
+					
+					if (applicationGetDetails.getBuildEnv() instanceof Build) {
+						
+						final Map<String, String> customBuildData = errorCollatorListener.getTaskContext().getBuildContext().getBuildResult().getCustomBuildData();
+			            customBuildData.put(OUTPUT_FILE_KEY, applicationGetDetails.getOutputFilename());
+					}
 					
 				} catch (Exception e) {
 					buildLogger.addErrorLogEntry(e.getMessage());

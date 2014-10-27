@@ -46,7 +46,7 @@ public class Validator {
 				throw new Exception(textProvider.getText("com.zend.zendserver.plugins.base_url.error"));// errorCollection.addError("zs_url", textProvider.getText("com.zend.zendserver.plugins.zs_url.error"));
 			}
 			
-			Pattern urlPattern = Pattern.compile("(https?://[\\w\\d\\.]+\\w+((:)(\\d){2,5})?/?([\\w\\d]+/?)*|/([\\w\\d]+/?)*)", Pattern.CASE_INSENSITIVE);
+			Pattern urlPattern = Pattern.compile("(https?://[\\w\\d\\-_.]+\\w+((:)(\\d){2,5})?/?([\\w\\d-_]+/?)*|/([\\w\\d-_]+/?)*)", Pattern.CASE_INSENSITIVE);
 		    Matcher matcher = urlPattern.matcher(urlValue);
 		    if (!matcher.matches()) {
 		    	throw new Exception(textProvider.getText("com.zend.zendserver.plugins.base_url.invalid"));

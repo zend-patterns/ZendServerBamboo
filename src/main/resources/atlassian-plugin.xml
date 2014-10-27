@@ -10,16 +10,47 @@
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="i18n"/>
     
-    <!-- add our web resources -->
-    <web-resource key="zendserver-resources" name="zendserver Web Resources">
-        <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
-        <resource type="download" name="deployment.css" location="/css/deployment.css"/>
-        <resource type="download" name="deployment.js" location="/js/deployment.js"/>
-        <resource type="download" name="images/" location="/images"/>
-
-        <context>zendserver</context>
-    </web-resource>
+    <xwork key="viewZendServer" name="Zend Server">
+        <package name="viewZendServer" extends="buildResultView">
+            <action name="ZendServer" class="com.zend.zendserver.bamboo.Publisher.ZendServer">
+                <result name="success" type="freemarker">/publisher/ZendServer.ftl</result>
+            </action>
+        </package>
+    </xwork>
+    
+    <web-item key="Zend-Server-\${buildNumber}" name="Zend-Server" section="chainResults.subMenu/chainResults" weight="1">
+        <label key="Zend Server"/>
+        <link linkId="Zend-Server-\${buildNumber}">/build/result/ZendServer.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <condition class="com.zend.zendserver.bamboo.Publisher.ZendServerViewCondition" />
+    </web-item>
+    
+    <xwork key="viewZendServerDeploymentDetails" name="Zend Server Deployment Details">
+        <package name="viewZendServerDeploymentDetails" extends="buildResultView">
+            <action name="ZendServerDeploymentDetails" class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentDetails">
+                <result name="success" type="freemarker">/publisher/ZendServerDeploymentDetails.ftl</result>
+            </action>
+        </package>
+    </xwork>
+    
+    <web-item key="Zend-Server-Deployment-Details-\${buildNumber}" name="Zend-Server-Deployment-Details" section="results.subMenu/results" weight="2">
+        <label key="Zend Server Deployment Details"/>
+        <link linkId="Zend-Server-Deployment-Details-\${buildNumber}">/build/result/ZendServerDeploymentDetails.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <condition class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentDetailsViewCondition" />
+    </web-item>
+    
+    <xwork key="viewZendServerStatistsics" name="Zend Server Statistics">
+        <package name="viewZendServerStatistics" extends="buildResultView">
+            <action name="ZendServerStatistics" class="com.zend.zendserver.bamboo.Publisher.ZendServerStatistics">
+                <result name="success" type="freemarker">/publisher/ZendServerStatistics.ftl</result>
+            </action>
+        </package>
+    </xwork>
+    
+    <web-item key="Zend-Server-Statistics-\${buildNumber}" name="Zend-Server-Statistics" section="results.subMenu/results" weight="3">
+        <label key="Zend Server Statistics"/>
+        <link linkId="Zend-Server-Statistics-\${buildNumber}">/build/result/ZendServerStatistics.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <condition class="com.zend.zendserver.bamboo.Publisher.ZendServerStatisticsViewCondition" />
+    </web-item>
     
     <!-- publish our component -->
     <component key="ZendServerPluginComponent" class="com.zend.zendserver.bamboo.ZendServerImpl" public="true">
@@ -67,6 +98,16 @@
   		<configuration class="com.zend.zendserver.bamboo.RollbackTaskConfigurator"/>
   		<resource type="freemarker" name="edit" location="editRollbackTask.ftl"/>
       	<resource type="freemarker" name="view" location="viewRollbackTask.ftl"/>
+	</taskType>
+	
+	<taskType key="ZendServerStatisticsTask" name="Zend Server Statistics Task" class="com.zend.zendserver.bamboo.StatisticsTask">
+  		<description>Retrieve statistical data from the PHP app</description>
+  		<category name="deployment"/>
+  		<category name="test"/>
+  		<resource type="download" name="icon" location="images/zend_logo.png"/>
+  		<configuration class="com.zend.zendserver.bamboo.StatisticsTaskConfigurator"/>
+  		<resource type="freemarker" name="edit" location="editStatisticsTask.ftl"/>
+      	<resource type="freemarker" name="view" location="viewStatisticsTask.ftl"/>
 	</taskType>
   	
     <capabilityType key="system.zswa-client.executable" name="Zend Server Web API Client" class="com.zend.zendserver.bamboo.ZendServerWebApiClientCapability" sortOrder="2000">

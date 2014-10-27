@@ -10,7 +10,7 @@ import com.zend.zendserver.bamboo.Env.BuildEnv;
 
 public class DeploymentProcess implements Process {
 	
-	public static final String OUTPUT_FILE_PREFIX = "zwsa/installApp-";
+	public static final String OUTPUT_FILE_PREFIX = "installApp-";
 	public static final String OUTPUT_FILE_SUFFIX = ".xml";
 	
 	private final ConfigurationMap configMap;

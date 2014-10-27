@@ -13,14 +13,23 @@ import com.atlassian.bamboo.build.logger.BuildLogger;
 public class ResultParserApplicationGetStatus extends ResultParser {
 
 	private BuildLogger buildLogger;
+	private String applicationId = null;
+	private String deploymentTime = null;
+	private String deployedVersion = null;
+	
 	public ResultParserApplicationGetStatus(String file, BuildLogger buildLogger)
-			throws ParserConfigurationException, SAXException, IOException {
+			throws Exception {
 		super(file);
 		
 		this.buildLogger = buildLogger;
 	}
 	
-	public String getApplicationId(String applicationName) throws Exception {
+	public ResultParserApplicationGetStatus(String file)
+			throws Exception {
+		super(file);
+	}
+	
+	private void fetchApplicationData(String applicationName) throws Exception {
 		String id = null;
 		Element responseData = getNodeResponseData();
 		Element applicationsList = getNode(responseData, "applicationsList");
@@ -30,12 +39,34 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 	        Element applicationInfo = (Element) applicationInfoList.item(i);
 	        if (getValue(applicationInfo, "userAppName").equals(applicationName)) {
 				id = getValue(applicationInfo, "id");
+				applicationId = id;
+				deploymentTime = getValue(applicationInfo, "creationTime");
+				deployedVersion = getValue(applicationInfo, "deployedVersion");
 				break;
 			}
 	    }
 
 		if (id == null) throw new Exception("id not found for application " + applicationName);
+	}
+	
+	public String getApplicationId(String applicationName) throws Exception {
+		if (applicationId == null) {
+			fetchApplicationData(applicationName);
+		}
+		return applicationId;
+	}
 
-		return id;
+	public String getDeploymentTime(String applicationName) throws Exception {
+		if (deploymentTime == null) {
+			fetchApplicationData(applicationName);
+		}
+		return deploymentTime;
+	}
+	
+	public String getDeployedVersion(String applicationName) throws Exception {
+		if (deployedVersion == null) {
+			fetchApplicationData(applicationName);
+		}
+		return deployedVersion;
 	}
 }
