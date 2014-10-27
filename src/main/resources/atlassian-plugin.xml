@@ -10,17 +10,18 @@
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="i18n"/>
     
-    <xwork key="viewZendServerDeploymentJobs" name="Zend Server Deployment Jobs">
-        <package name="viewZendServerDeploymentJobs" extends="buildResultView">
-            <action name="ZendServerDeploymentJobs" class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentJobs">
-                <result name="success" type="freemarker">/publisher/ZendServerDeploymentJobs.ftl</result>
+    <xwork key="viewZendServer" name="Zend Server">
+        <package name="viewZendServer" extends="buildResultView">
+            <action name="ZendServer" class="com.zend.zendserver.bamboo.Publisher.ZendServer">
+                <result name="success" type="freemarker">/publisher/ZendServer.ftl</result>
             </action>
         </package>
     </xwork>
     
-    <web-item key="Zend-Server-Deployment-Jobs-\${buildNumber}" name="Zend-Server-Deployment-Jobs" section="chainResults.subMenu/chainResults" weight="1">
-        <label key="Zend Server Deployment Jobs"/>
-        <link linkId="Zend-Server-Deployment-Jobs-\${buildNumber}">/build/result/ZendServerDeploymentJobs.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+    <web-item key="Zend-Server-\${buildNumber}" name="Zend-Server" section="chainResults.subMenu/chainResults" weight="1">
+        <label key="Zend Server"/>
+        <link linkId="Zend-Server-\${buildNumber}">/build/result/ZendServer.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <condition class="com.zend.zendserver.bamboo.Publisher.ZendServerViewCondition" />
     </web-item>
     
     <xwork key="viewZendServerDeploymentDetails" name="Zend Server Deployment Details">

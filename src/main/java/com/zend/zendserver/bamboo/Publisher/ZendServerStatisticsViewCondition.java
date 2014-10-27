@@ -20,9 +20,7 @@ public class ZendServerStatisticsViewCondition implements Condition {
     }
 
     public boolean shouldDisplay(Map<String, Object> context) {
-        String buildKey = (String) context.get("buildKey");
-        
-        PlanKey planKey = PlanKeys.getPlanKey(buildKey);
+    	PlanKey planKey = PlanKeys.getPlanKey((String) context.get("planKey"));
         Plan plan = planManager.getPlanByKey(planKey);
        
         List<TaskDefinition> tasks = plan.getBuildDefinition().getTaskDefinitions();

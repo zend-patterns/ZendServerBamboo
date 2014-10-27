@@ -15,9 +15,6 @@ import com.zend.zendserver.bamboo.TaskResult.ResultParserDeploymentCheck;
 
 @SuppressWarnings("serial")
 public class ZendServerDeploymentDetails extends PlanResultsAction {
-    private boolean isJob;
-    private String strTest;
-    
     private String appId;
 	private String appBaseUrl;
 	private String appName;
@@ -29,36 +26,11 @@ public class ZendServerDeploymentDetails extends PlanResultsAction {
     
     public String doExecute() throws Exception {
         String result = super.doExecute();
-            this.isJob = true;
-            strTest = "+++";
 
-            strTest += "<br>---------------------------------<br>";
-            Map<String, String> data = this.getResultsSummary().getCustomBuildData();
-            
-            
-            strTest += " working.dir: " + data.get("working.directory");
-            strTest += " buildId: " + this.getBuildNumber();
-            String revision = data.get("repository.revision.number").substring(0, 6);
-            strTest += " revision: " + revision;
-            strTest += "<br>---------------------------------<br>";
-            
-            strTest += data.get(DeploymentTask.OUTPUT_FILE_KEY);
-            
-strTest += "<br>---------------------------------<br>";
-            
-            //strTest += data.get(DeploymentCheckTask.OUTPUT_FILE_KEY);
-            buildApplicationInfo();
+        buildApplicationInfo();
             
         return result;
 
-    }
-    
-    public boolean getIsJob() {
-        return this.isJob;
-    }
-    
-    public String getStrTest() {
-        return this.strTest;
     }
     
     private void buildApplicationInfo() throws ParserConfigurationException, SAXException, IOException {
