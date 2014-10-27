@@ -3,11 +3,19 @@ function drawChart() {
 	$('#container').highcharts({
 
         chart: {
-            type: 'column'
+            type: 'column',
+            events: {
+            	load: function(event) {
+            	}
+        	} 
         },
 
         title: {
             text: 'Unique events before and after Deployment'
+        },
+        
+        legend: {
+            enabled: false
         },
 
         xAxis: {
@@ -24,7 +32,19 @@ function drawChart() {
             min: 0,
             title: {
                 text: 'Number of Events'
-            }
+            },
+            stackLabels: {
+            	enabled: true,
+                rotation: 270,
+                certicalAlign: 'bottom',
+                y: -37,
+            	style: {
+                	color: 'gray'
+	            },
+	            formatter: function() {
+	                return this.stack;
+	            }
+	        }
         },
 
         tooltip: {
@@ -45,38 +65,38 @@ function drawChart() {
         {
             name: 'Notices before Deploy',
             data: [${issuesListNoticeBeforeDeploy}],
-            stack: 'before',
-            color: '#01a3c6'
+            stack: 'before deploy',
+            color: '#57b5e4'
         }, 
         {
             name: 'Notices after Deploy',
             data: [${issuesListNoticeAfterDeploy}],
-            stack: 'after',
-            color: '#00d2ff'
+            stack: 'after deploy',
+            color: '#57b5e4'
         }, 
         {
             name: 'Warnings before Deploy',
             data: [${issuesListWarningBeforeDeploy}],
-            stack: 'before',
-            color: '#d6d900'
+            stack: 'before deploy',
+            color: '#fcb31f'
         }, 
         {
             name: 'Warnings after Deploy',
             data: [${issuesListWarningAfterDeploy}],
-            stack: 'after',
-            color: '#ffff00'
+            stack: 'after deploy',
+            color: '#fcb31f'
         }, 
         {
             name: 'Critical issues before Deploy',
             data: [${issuesListCriticalBeforeDeploy}],
-            stack: 'before',
-            color: '#b90000'
+            stack: 'before deploy',
+            color: '#ed4e29'
         }, 
         {
             name: 'Critical issues after Deploy',
             data: [${issuesListCriticalAfterDeploy}],
-            stack: 'after',
-            color: '#FF0000'
+            stack: 'after deploy',
+            color: '#ed4e29'
         }]
     });
 }
@@ -98,6 +118,7 @@ else {
 
 <style type="text/css">
 div.bg {
+margin-top: 30px;
 background-image: url(http://static.zend.com/cmsdata/solutions/zend-server-logo-396x55px.png);
 background-repeat: no-repeat;
 background-position: top right;
