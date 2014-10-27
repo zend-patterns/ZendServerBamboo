@@ -14,15 +14,13 @@ import com.zend.zendserver.bamboo.StatisticsTask;
 
 public class ZendServerStatisticsViewCondition implements Condition {
 
-    public static final String BUILD_KEY = "buildKey";
-
     private PlanManager planManager;
 
     public void init(Map<String, String> map) throws PluginParseException {
     }
 
     public boolean shouldDisplay(Map<String, Object> context) {
-        String buildKey = (String) context.get(BUILD_KEY);
+        String buildKey = (String) context.get("buildKey");
         
         PlanKey planKey = PlanKeys.getPlanKey(buildKey);
         Plan plan = planManager.getPlanByKey(planKey);
