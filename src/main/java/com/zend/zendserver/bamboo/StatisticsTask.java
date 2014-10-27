@@ -34,6 +34,8 @@ import com.zend.zendserver.bamboo.TaskResult.ResultParserMonitorGetIssuesListPre
 
 public class StatisticsTask extends BaseTask implements CommonTaskType, TaskType {
 	
+	public static final String KEY = "org.zend.zendserver.bamboo.plugin.zendserver:ZendServerStatisticsTask";
+	
 	public static final String OUTPUT_FILE_KEY_ISSUES_LIST_BEFORE_DEPLOY = "task.report.issues_list_before_deploy";
 	public static final String OUTPUT_FILE_KEY_ISSUES_LIST_AFTER_DEPLOY = "task.report.issues_list_after_deploy";
 	public static final String TIME_DEPLOY = "task.deploytime";
@@ -42,6 +44,7 @@ public class StatisticsTask extends BaseTask implements CommonTaskType, TaskType
 	public static final String TIME_START_PERIOD_AFTER_DEPLOY = "task.deploytime.period_after_deploy_start";
 	public static final String TIME_END_PERIOD_AFTER_DEPLOY = "task.deploytime.period_after_deploy_end";
 	public static final String DATE_FORMATTER_PATTERN = "yyyy-MM-dd HH:mm";
+	public static final String PUBLISHER_DISPLAY = "task.publisher.statistics.display";
 	
 	private long deploymentTimstamp;
 	private long nowTimestamp;
@@ -116,6 +119,8 @@ public class StatisticsTask extends BaseTask implements CommonTaskType, TaskType
 	            customBuildData.put(TIME_END_PERIOD_BEFORE_DEPLOY, sdf.format(deploymentDate));
 	            customBuildData.put(TIME_START_PERIOD_AFTER_DEPLOY, sdf.format(deploymentDate));
 	            customBuildData.put(TIME_END_PERIOD_AFTER_DEPLOY, sdf.format(nowDate));
+	            
+	            customBuildData.put(PUBLISHER_DISPLAY, "1");
 			}
 		}
 		catch (Exception e) {

@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zend.zendserver.bamboo.plugin</groupId>
     <artifactId>zendserver</artifactId>
-    <version>0.9</version>
+    <version>1.1.0</version>
     <organization>
         <name>Zend Technologies</name>
         <url>http://www.zend.com/</url>
     </organization>
     <name>zendserver</name>
-    <description>This is the org.zend.zendserver.bamboo.plugin:zendserver plugin for Atlassian Bamboo.</description>
+    <description>This is the Zend Server plugin for Atlassian Bamboo.</description>
     <properties>
         <bamboo.version>5.3</bamboo.version>
         <bamboo.data.version>3.2.2</bamboo.data.version>
-        <amps.version>5.0.4</amps.version>
+        <amps.version>5.0.6</amps.version>
         <plugin.testrunner.version>1.1.2</plugin.testrunner.version>
         <maven-compiler-plugin.version>4.2.18</maven-compiler-plugin.version>
     </properties>

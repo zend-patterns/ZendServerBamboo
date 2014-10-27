@@ -34,7 +34,6 @@
     <web-item key="Zend-Server-Deployment-Details-\${buildNumber}" name="Zend-Server-Deployment-Details" section="results.subMenu/results" weight="2">
         <label key="Zend Server Deployment Details"/>
         <link linkId="Zend-Server-Deployment-Details-\${buildNumber}">/build/result/ZendServerDeploymentDetails.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
-        <!--condition class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentStatisticsViewCondition"/-->
     </web-item>
     
     <xwork key="viewZendServerStatistsics" name="Zend Server Statistics">
@@ -48,6 +47,7 @@
     <web-item key="Zend-Server-Statistics-\${buildNumber}" name="Zend-Server-Statistics" section="results.subMenu/results" weight="3">
         <label key="Zend Server Statistics"/>
         <link linkId="Zend-Server-Statistics-\${buildNumber}">/build/result/ZendServerStatistics.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <condition class="com.zend.zendserver.bamboo.Publisher.ZendServerStatisticsViewCondition" />
     </web-item>
     
     <!-- publish our component -->
