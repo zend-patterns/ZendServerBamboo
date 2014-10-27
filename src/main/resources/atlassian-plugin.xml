@@ -35,6 +35,7 @@
     <web-item key="Zend-Server-Deployment-Details-\${buildNumber}" name="Zend-Server-Deployment-Details" section="results.subMenu/results" weight="2">
         <label key="Zend Server Deployment Details"/>
         <link linkId="Zend-Server-Deployment-Details-\${buildNumber}">/build/result/ZendServerDeploymentDetails.action?buildKey=${planKey}&amp;buildNumber=${buildNumber}</link>
+        <condition class="com.zend.zendserver.bamboo.Publisher.ZendServerDeploymentDetailsViewCondition" />
     </web-item>
     
     <xwork key="viewZendServerStatistsics" name="Zend Server Statistics">
