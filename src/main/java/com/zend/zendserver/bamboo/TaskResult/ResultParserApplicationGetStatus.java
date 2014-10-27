@@ -15,6 +15,7 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 	private BuildLogger buildLogger;
 	private String applicationId = null;
 	private String deploymentTime = null;
+	private String deployedVersion = null;
 	
 	public ResultParserApplicationGetStatus(String file, BuildLogger buildLogger)
 			throws Exception {
@@ -40,6 +41,7 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 				id = getValue(applicationInfo, "id");
 				applicationId = id;
 				deploymentTime = getValue(applicationInfo, "creationTime");
+				deployedVersion = getValue(applicationInfo, "deployedVersion");
 				break;
 			}
 	    }
@@ -59,5 +61,12 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 			fetchApplicationData(applicationName);
 		}
 		return deploymentTime;
+	}
+	
+	public String getDeployedVersion(String applicationName) throws Exception {
+		if (deployedVersion == null) {
+			fetchApplicationData(applicationName);
+		}
+		return deployedVersion;
 	}
 }

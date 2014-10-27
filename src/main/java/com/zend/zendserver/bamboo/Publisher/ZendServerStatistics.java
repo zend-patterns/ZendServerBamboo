@@ -31,13 +31,15 @@ public class ZendServerStatistics extends PlanResultsAction {
 	private String timeEndPeriodBeforeDeploy;
 	private String timeStartPeriodAfterDeploy;
 	private String timeEndPeriodAfterDeploy;
-	private String tmp;
+	private String appVersion;
     
     public String doExecute() throws Exception {
         String result = super.doExecute();
         
         Map<String, String> metadata = this.getResultsSummary().getCustomBuildData();
 		
+        setAppVersion(metadata.get(StatisticsTask.APP_VERSION));
+        
         issueTypes = new Hashtable<String, String>();
 		initIssueTypes(metadata.get(StatisticsTask.OUTPUT_FILE_KEY_ISSUES_LIST_BEFORE_DEPLOY));
 		initIssueTypes(metadata.get(StatisticsTask.OUTPUT_FILE_KEY_ISSUES_LIST_AFTER_DEPLOY));
@@ -149,14 +151,6 @@ public class ZendServerStatistics extends PlanResultsAction {
 		this.issuesAfterDeploy = issuesAfterDeploy;
 	}
 
-	public String getTmp() {
-		return tmp;
-	}
-
-	public void setTmp(String tmp) {
-		this.tmp = tmp;
-	}
-
 	public String getTimeDeploy() {
 		return timeDeploy;
 	}
@@ -261,5 +255,13 @@ public class ZendServerStatistics extends PlanResultsAction {
 		}
 
 		return tmp;
+	}
+
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
 	}
 }

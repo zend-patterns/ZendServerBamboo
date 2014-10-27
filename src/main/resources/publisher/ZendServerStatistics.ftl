@@ -143,6 +143,10 @@ text-align: left;
 		    <dt class="DeploymentTime" style="font-weight: normal">Deployment Time:</dt>
 			<dd>${timeDeploy}</dd>
 		</dl>
+		<dl class="details-list">
+		    <dt class="AppVersion" style="font-weight: normal">App Version:</dt>
+			<dd>${appVersion}</dd>
+		</dl>
 	</div>
 </div>
 

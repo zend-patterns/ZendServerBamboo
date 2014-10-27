@@ -44,7 +44,7 @@ public class StatisticsTask extends BaseTask implements CommonTaskType, TaskType
 	public static final String TIME_START_PERIOD_AFTER_DEPLOY = "task.deploytime.period_after_deploy_start";
 	public static final String TIME_END_PERIOD_AFTER_DEPLOY = "task.deploytime.period_after_deploy_end";
 	public static final String DATE_FORMATTER_PATTERN = "yyyy-MM-dd HH:mm";
-	public static final String PUBLISHER_DISPLAY = "task.publisher.statistics.display";
+	public static final String APP_VERSION = "task.app.version";
 	
 	private long deploymentTimstamp;
 	private long nowTimestamp;
@@ -95,8 +95,8 @@ public class StatisticsTask extends BaseTask implements CommonTaskType, TaskType
 			String filename = applicationGetStatus.getOutputFilename();
 			statusParser = new ResultParserApplicationGetStatus(filename);
 			
-			String applicationId = statusParser.getApplicationId(configMap.get("app_name"));
 			String deploymentTime = statusParser.getDeploymentTime(configMap.get("app_name"));
+			String deployedVersion = statusParser.getDeployedVersion(configMap.get("app_name"));
 			
 			buildDates(deploymentTime);
 			
@@ -120,7 +120,7 @@ public class StatisticsTask extends BaseTask implements CommonTaskType, TaskType
 	            customBuildData.put(TIME_START_PERIOD_AFTER_DEPLOY, sdf.format(deploymentDate));
 	            customBuildData.put(TIME_END_PERIOD_AFTER_DEPLOY, sdf.format(nowDate));
 	            
-	            customBuildData.put(PUBLISHER_DISPLAY, "1");
+	            customBuildData.put(APP_VERSION, deployedVersion);
 			}
 		}
 		catch (Exception e) {
