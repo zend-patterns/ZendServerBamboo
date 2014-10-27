@@ -1,5 +1,6 @@
 <style type="text/css">
 div.bg {
+margin-top: 30px;
 background-image: url(http://static.zend.com/cmsdata/solutions/zend-server-logo-396x55px.png);
 background-repeat: no-repeat;
 background-position: top right;
