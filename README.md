@@ -73,6 +73,12 @@ Shared Artifacts
 If the ZPK files built in  Zend Server Packaging Task should be reused for  Deployments to other systems, the ZPK files can be marked as [Shared Artifacts]. 
 ZPK files are stored in the zpk sub-directory of the working directory. In order to configure this as shared artifacts, the Location has to be set to 'zpk' and the Copy pattern is '**/*.zpk'.
 
+Zend Server Statistics Task
+---------------------------
+See [Configuring Tasks] on how to add a Bamboo task in general.
+
+The Zend Server Statistics Graph gives you event related data from Zend Server to analyse a new deployment. All unique events after a deployment will be compared with the number of events which occured in the same time range before the event.
+
 [Zend Server SDK]:https://github.com/zend-patterns/ZendServerSDK
 [Package Structure]:http://files.zend.com/help/Zend-Server/zend-server.htm#understanding_the_package_structure.htm
 [Configuring Tasks]:https://confluence.atlassian.com/display/BAMBOO/Configuring+tasks
