@@ -19,6 +19,9 @@ import com.zend.zendserver.bamboo.Process.ProcessHandler;
 import com.zend.zendserver.bamboo.TaskResult.ResultParserInstallApp;
 
 public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType {
+	
+	public static final String KEY = "org.zend.zendserver.bamboo.plugin.zendserver:ZendServerDeploymentTask";
+	
 	public static final String OUTPUT_FILE_KEY = "task.report.deployment";
 	public static final String APPLICATION_ID = "task.apllication.id";
 	
@@ -68,13 +71,6 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 			File resultFileDeployment = new File(deployment.getOutputFilename());
 			
 			if (deployment.getBuildEnv() instanceof Build) {
-				
-				CustomVariableContext abc = this.getCustomVariableContext();
-				Map<String, String> vars = abc.getVariables(errorCollatorListener.getTaskContext().getCommonContext());
-				for (Map.Entry<String, String> entry : vars.entrySet())
-				{
-					buildLogger.addErrorLogEntry(entry.getKey() + "/" + entry.getValue());
-				}
 				
 				final Map<String, String> customBuildData = errorCollatorListener.getTaskContext().getBuildContext().getBuildResult().getCustomBuildData();
 	            customBuildData.put(OUTPUT_FILE_KEY, deployment.getOutputFilename());
