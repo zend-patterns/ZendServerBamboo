@@ -110,7 +110,7 @@
       	<resource type="freemarker" name="view" location="viewStatisticsTask.ftl"/>
 	</taskType>
   	
-    <capabilityType key="system.zswa-client.executable" name="Zend Server Web API Client" class="com.zend.zendserver.bamboo.ZendServerWebApiClientCapability" sortOrder="2000">
+    <capabilityType key="com.zend.zendserver.plugins.capability.zswa" name="Zend Server Web API Client" class="com.zend.zendserver.bamboo.ZendServerWebApiClientCapability" sortOrder="2000">
 		<description>The Zend Server Web API Client capability type</description>
 		<resource type="freemarker" name="edit" location="editZswaClientCapability.ftl"/>
 	</capabilityType>
