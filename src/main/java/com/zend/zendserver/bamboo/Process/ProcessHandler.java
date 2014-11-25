@@ -33,6 +33,8 @@ public class ProcessHandler {
 		ExternalProcessBuilder epb = new ExternalProcessBuilder()
 			.command(process.getCommandList())
 			.env("RAW_ZS_OUTPUT", "1")
+			.env("HOMEPATH", "\\")
+			.env("HOMEDRIVE", "c:")
 			.handler(processHandler);
 		return epb;
 	}
