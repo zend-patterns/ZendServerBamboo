@@ -1,11 +1,9 @@
 package com.zend.zendserver.bamboo.Process;
 
 import com.atlassian.bamboo.v2.build.agent.capability.CapabilityContext;
+import com.zend.zendserver.bamboo.ZendServerWebApiClientCapability;
 
 public class ExecutableHelper {
-	public final static String EXEC_KEY_PHAR = "system.zswa-client.executable";
-	public final static String EXEC_KEY_PHP = "system.zswa-client.executable.php";
-	
 	private CapabilityContext capabilityContext;
 	
 	public ExecutableHelper (CapabilityContext capabilityContext) {
@@ -14,14 +12,13 @@ public class ExecutableHelper {
 	
 	public String getExecutable() throws Exception {
 		String executable = "";
-		
-		if (capabilityContext.getCapabilityValue(EXEC_KEY_PHAR) != null &&
-				!capabilityContext.getCapabilityValue(EXEC_KEY_PHAR).isEmpty()) {
-			executable = capabilityContext.getCapabilityValue(EXEC_KEY_PHAR);
+		if (capabilityContext.getCapabilityValue(ZendServerWebApiClientCapability.EXECUTABLE_KEY_PHAR) != null &&
+				!capabilityContext.getCapabilityValue(ZendServerWebApiClientCapability.EXECUTABLE_KEY_PHAR).isEmpty()) {
+			executable = capabilityContext.getCapabilityValue(ZendServerWebApiClientCapability.EXECUTABLE_KEY_PHAR);
 		}
-		else if (capabilityContext.getCapabilityValue(EXEC_KEY_PHP) != null &&
-				!capabilityContext.getCapabilityValue(EXEC_KEY_PHP).isEmpty()) {
-			executable = capabilityContext.getCapabilityValue(EXEC_KEY_PHP);
+		else if (capabilityContext.getCapabilityValue(ZendServerWebApiClientCapability.EXECUTABLE_KEY_PHP) != null &&
+				!capabilityContext.getCapabilityValue(ZendServerWebApiClientCapability.EXECUTABLE_KEY_PHP).isEmpty()) {
+			executable = capabilityContext.getCapabilityValue(ZendServerWebApiClientCapability.EXECUTABLE_KEY_PHP);
 		}
 		else
 		{

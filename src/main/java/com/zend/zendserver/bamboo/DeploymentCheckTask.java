@@ -1,15 +1,11 @@
 package com.zend.zendserver.bamboo;
 
-import java.awt.Event;
 import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollationService;
-import com.atlassian.bamboo.build.test.TestCollectionResult;
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.results.tests.TestResults;
 import com.atlassian.bamboo.task.CommonTaskContext;
 import com.atlassian.bamboo.task.CommonTaskType;
 import com.atlassian.bamboo.task.TaskContext;
