@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zend.zendserver.bamboo.plugin</groupId>
     <artifactId>zendserver</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <organization>
         <name>Zend Technologies</name>
         <url>http://www.zend.com/</url>
