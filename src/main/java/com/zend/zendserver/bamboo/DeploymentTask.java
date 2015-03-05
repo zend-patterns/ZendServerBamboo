@@ -95,6 +95,11 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 			builder.failed();
 		}
 		
-		return builder.checkReturnCode(deployment.getExternalProcess()).build();
+		if (deployment.hasFailed()) {
+			return builder.failedWithError().build();
+		}
+		else {
+			return builder.checkReturnCode(deployment.getExternalProcess()).build();
+		}
 	}
 }

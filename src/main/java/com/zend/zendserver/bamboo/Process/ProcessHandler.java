@@ -52,6 +52,7 @@ public class ProcessHandler {
 		catch (Exception e) {
 			buildLogger.addErrorLogEntry("Exception in ProcessHandler.execute function");
 			buildLogger.addErrorLogEntry(e.getMessage());
+			buildLogger.addErrorLogEntry("Please check your 'Server capabilities' settings in the admin area. A valid 'Zend Server Web API' capability has to be defined in order to execute this task.");
 			failed = true;
 		}
 	}
