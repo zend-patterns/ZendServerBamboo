@@ -53,7 +53,7 @@ public class Build implements BuildEnv {
 		if (!StringUtils.isEmpty(customZpk)) {
 			File zpk = new File(customZpk);
 			if (!zpk.exists()) {
-				throw new Exception("Cannot find a ZPK file under the given path [" + customZpk + "]. Please check your task confiiguration.");
+				throw new Exception("Cannot find a ZPK file under the given path [" + customZpk + "]. Please check your task configuration.");
 			}
 			return customZpk;
 		}
