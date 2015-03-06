@@ -2,7 +2,10 @@ package com.zend.zendserver.bamboo.Env;
 
 import java.io.File;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.atlassian.bamboo.task.TaskContext;
+import com.atlassian.core.util.FileUtils;
 
 public class Build implements BuildEnv {
 	private TaskContext taskContext;
@@ -46,6 +49,14 @@ public class Build implements BuildEnv {
 	}
 	
 	public String getZpkPath() throws Exception {
+		String customZpk = taskContext.getConfigurationMap().get("customzpk");
+		if (!StringUtils.isEmpty(customZpk)) {
+			File zpk = new File(customZpk);
+			if (!zpk.exists()) {
+				throw new Exception("Cannot find a ZPK file under the given path [" + customZpk + "]. Please check your task confiiguration.");
+			}
+			return customZpk;
+		}
 		File zpkDir = prepareDir();
         return zpkDir.getAbsolutePath() + "/" + getZpkFileName();
 	}

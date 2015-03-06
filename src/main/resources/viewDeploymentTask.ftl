@@ -5,3 +5,4 @@
 [@ww.label labelKey="Application Name" name="app_name"/]
 [@ww.label labelKey="Zend Server Version" name="zsversion"/]
 [@ww.label labelKey="User Params" name="userparams"/]
+[@ww.label labelKey="Custom ZPK Path" name="customzpk"/]

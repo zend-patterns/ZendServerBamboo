@@ -3,6 +3,7 @@ package com.zend.zendserver.bamboo.Process;
 import java.io.File;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
+import com.atlassian.bamboo.exception.StartupException;
 import com.atlassian.utils.process.ExternalProcess;
 import com.atlassian.utils.process.ExternalProcessBuilder;
 import com.atlassian.utils.process.PluggableProcessHandler;
@@ -49,10 +50,15 @@ public class ProcessHandler {
 	        
 	        outputHandler.write();
 		}
+		catch (StartupException e) {
+			buildLogger.addErrorLogEntry("StartupException in ProcessHandler.execute function");
+			buildLogger.addErrorLogEntry(e.getMessage());
+			buildLogger.addErrorLogEntry("Please check your 'Server capabilities' settings in the admin area. A valid 'Zend Server Web API' capability has to be defined in order to execute this task.");
+			failed = true;
+		}
 		catch (Exception e) {
 			buildLogger.addErrorLogEntry("Exception in ProcessHandler.execute function");
 			buildLogger.addErrorLogEntry(e.getMessage());
-			buildLogger.addErrorLogEntry("Please check your 'Server capabilities' settings in the admin area. A valid 'Zend Server Web API' capability has to be defined in order to execute this task.");
 			failed = true;
 		}
 	}

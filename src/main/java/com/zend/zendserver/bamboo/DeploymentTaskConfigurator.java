@@ -22,6 +22,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", params.getString("app_name"));
         context.put("zsversion", params.getString("zsversion"));
         context.put("userparams", params.getString("userparams"));
+        context.put("customzpk", params.getString("customzpk"));
         
         return context;
     }
@@ -37,6 +38,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", "myApp");
         context.put("zsversion", "6.3");
         context.put("userparams", "");
+        context.put("customzpk", "");
     }
 
     public void populateContextForEdit(final Map<String, Object> context, final TaskDefinition taskDefinition)
@@ -50,6 +52,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
+        context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
     }
 
     public void populateContextForView(final Map<String, Object> context, final TaskDefinition taskDefinition)
@@ -63,6 +66,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
+        context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
     }
 
     public void validate(final ActionParametersMap params, final ErrorCollection errorCollection)

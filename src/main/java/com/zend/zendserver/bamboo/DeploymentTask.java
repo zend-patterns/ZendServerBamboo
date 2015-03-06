@@ -44,6 +44,7 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 	}
 
 	public TaskResult execute(TaskContext taskContext) throws TaskException {
+		
 		Build build = new Build(taskContext);
 		init(taskContext, build);
 				

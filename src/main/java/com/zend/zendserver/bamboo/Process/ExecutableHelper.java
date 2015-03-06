@@ -1,5 +1,6 @@
 package com.zend.zendserver.bamboo.Process;
 
+import com.atlassian.bamboo.exception.StartupException;
 import com.atlassian.bamboo.v2.build.agent.capability.CapabilityContext;
 import com.zend.zendserver.bamboo.ZendServerWebApiClientCapability;
 
@@ -22,7 +23,7 @@ public class ExecutableHelper {
 		}
 		else
 		{
-			throw new Exception("Could not find valid executable!");
+			throw new StartupException("Could not find valid executable!");
 		}
 		
 		return executable;
