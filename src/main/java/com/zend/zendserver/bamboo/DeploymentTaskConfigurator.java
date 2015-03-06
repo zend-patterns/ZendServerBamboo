@@ -82,6 +82,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         validator.validateAppName();
         validator.validateBaseUrl();
         validator.validateZsVersion();
+        validator.validateCustomZpkFilename();
     }
     
     public void setTextProvider(final TextProvider textProvider)

@@ -5,7 +5,6 @@ import java.io.File;
 import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.bamboo.task.TaskContext;
-import com.atlassian.core.util.FileUtils;
 
 public class Build implements BuildEnv {
 	private TaskContext taskContext;
@@ -45,6 +44,11 @@ public class Build implements BuildEnv {
 	}
 	
 	public String getZpkFileName() throws Exception {
+		String customZpk = taskContext.getConfigurationMap().get("customzpk");
+		if (!StringUtils.isEmpty(customZpk)) {
+			File zpk = new File(customZpk);
+			return zpk.getName();
+		}
 		return getVersion() + ".zpk";
 	}
 	
@@ -62,7 +66,15 @@ public class Build implements BuildEnv {
 	}
 	
 	public String getZpkDir() {
-		File zpkDir = prepareDir();
-        return zpkDir.getAbsolutePath();
+		File zpk;
+		String customZpk = taskContext.getConfigurationMap().get("customzpk");
+		if (!StringUtils.isEmpty(customZpk)) {
+			zpk = new File(customZpk);
+			return zpk.getParent();
+		}
+		else {
+			zpk = prepareDir();
+			return zpk.getAbsolutePath();
+		}
 	}
 }

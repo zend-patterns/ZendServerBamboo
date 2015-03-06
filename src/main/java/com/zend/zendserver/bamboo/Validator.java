@@ -1,5 +1,7 @@
 package com.zend.zendserver.bamboo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +10,7 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 
 import com.atlassian.bamboo.collections.ActionParametersMap;
 import com.atlassian.bamboo.utils.error.ErrorCollection;
+import com.atlassian.core.util.FileUtils;
 import com.atlassian.struts.TextProvider;
 
 public class Validator {
@@ -123,5 +126,18 @@ public class Validator {
 		}
 		
 		
+	}
+	
+	void validateCustomZpkFilename() {
+		final String customzpk = params.getString("customzpk");
+		if (!StringUtils.isEmpty(customzpk)) {	
+			try {
+				FileUtils.ensureFileAndPathExist(new File(customzpk));
+			}
+		    catch (IOException e)
+		    {
+		        errorCollection.addError("customzpk", textProvider.getText("com.zend.zendserver.plugins.customzpk.error"));
+		    }
+		}
 	}
 }

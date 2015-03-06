@@ -1,0 +1,2 @@
+[@ww.textfield labelKey="com.zend.zendserver.plugins.customzpk" name="customzpk" required='false'/]
+<small>Optionally a path to a custom ZPK file can be specified. If the field remains empty, the Deployment task stores a ZPK file in folder #WORKING_DIR#/zpk in the format BUILD_NR-REVISION_NR.zpk .</small>
