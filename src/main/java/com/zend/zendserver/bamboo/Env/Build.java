@@ -7,10 +7,15 @@ import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
+import com.atlassian.bamboo.plan.artifact.ArtifactDefinitionContext;
 import com.atlassian.bamboo.plan.artifact.ArtifactSubscriptionContext;
 import com.atlassian.bamboo.task.TaskContext;
+import com.atlassian.bamboo.task.TaskDefinition;
 
 public class Build implements BuildEnv {
+	public static final String DEFAULT_ZPK_DIR = "/zpk";
+	public static final String DEFAULT_ZPK_FILE_EXT = ".zpk";
+	
 	private TaskContext taskContext;
 	private BuildLogger logger;
 	private String zpkPath;
@@ -44,14 +49,8 @@ public class Build implements BuildEnv {
 		return taskContext.getWorkingDirectory().getAbsolutePath();
 	}
 	
-	private File prepareDir() {
-		File zpkDir = new File(getWorkingDir() + "/zpk");
-		zpkDir.mkdirs();
-		return zpkDir;
-	}
-	
 	public String getZpkFileName() throws Exception {
-		return getBuildNr() + ".zpk";
+		return getBuildNr() + DEFAULT_ZPK_FILE_EXT;
 	}
 	
 	public String getZpkPath() throws Exception {
@@ -77,6 +76,15 @@ public class Build implements BuildEnv {
 			logger.addBuildLogEntry(e.getMessage());
 		}
 		
+		logger.addBuildLogEntry("Searching for ZPK file from Artifact Definition");
+		try {
+			zpk = getZpkFromArtifactDefinition();
+			return getZpkAbsolutePath(zpk);
+		}
+		catch (Exception e) {
+			logger.addBuildLogEntry(e.getMessage());
+		}
+		
 		logger.addBuildLogEntry("Searching for ZPK file in working directory");
 		try {
 			zpk = getZpkFromTask();
@@ -89,28 +97,61 @@ public class Build implements BuildEnv {
 		throw new Exception("Cannot find ZPK file. If you're executing the ZPK Packaging task and the Deployment task in two different plans, you have to check your custom ZPK file setting in the task definition or specify an Artifact Dependency");
 	}
 	
-	public String getZpkDir() {
+	public String getZpkDir() throws Exception {
 		File zpk;
-		String customZpk = taskContext.getConfigurationMap().get("customzpk");
-		if (!StringUtils.isEmpty(customZpk)) {
-			zpk = new File(customZpk);
-			return zpk.getParent();
+		logger.addBuildLogEntry("Searching for ZPK dir from custom definition");
+		try {
+			zpk = getZpkFromCustomDefinition();
+			return getZpkAbsolutePath(zpk.getParentFile());
 		}
-		else {
-			zpk = prepareDir();
-			return zpk.getAbsolutePath();
+		catch (Exception e) {
+			logger.addBuildLogEntry(e.getMessage());
 		}
+		
+		logger.addBuildLogEntry("Searching for ZPK dir from Artifact Definition");
+		try {
+			zpk = getZpkFromArtifactDefinition();
+			return getZpkAbsolutePath(zpk.getParentFile());
+		}
+		catch (Exception e) {
+			logger.addBuildLogEntry(e.getMessage());
+		}
+		
+		zpk = new File(getWorkingDir() + "/" + DEFAULT_ZPK_DIR);
+		zpk.mkdirs();
+		logger.addBuildLogEntry("Using default zpk dir [" + DEFAULT_ZPK_DIR + "]");
+		return getZpkAbsolutePath(zpk);
+	}
+	
+	private File getZpkFromArtifactDefinition() throws Exception {
+		Iterator<ArtifactDefinitionContext> artifactIterator = taskContext.getBuildContext().getArtifactContext().getDefinitionContexts().iterator();
+		if (!artifactIterator.hasNext()) {
+			throw new Exception("No artifact definition found.");
+		}
+		
+		ArtifactDefinitionContext artifact = artifactIterator.next();
+		String pattern = artifact.getCopyPattern().replace("${bamboo.buildNumber}", getBuildNr());
+		String location = artifact.getLocation().replace("${bamboo.buildNumber}", getBuildNr());
+		String zpkDir = getWorkingDir() + "/" + location;
+		String zpk = getWorkingDir() + "/" + location + "/" + pattern;
+
+		new File(zpkDir).mkdirs();
+		
+		return new File(zpk);
 	}
 	
 	private File getZpkFromArtifactDependency() throws Exception {
-		if (!taskContext.getBuildContext().getArtifactContext().getSubscriptionContexts().iterator().hasNext()) {
+		 Iterator<ArtifactSubscriptionContext> artifactIterator = taskContext.getBuildContext().getArtifactContext().getSubscriptionContexts().iterator();
+		
+		if (!artifactIterator.hasNext()) {
 			throw new Exception("No artifact dependency found.");
 		}
 		
-		logger.addErrorLogEntry(taskContext.getBuildContext().getArtifactContext().getSubscriptionContexts().iterator().next().getDestinationPath());
-		logger.addErrorLogEntry(getZpkFileName());
+		ArtifactSubscriptionContext artifact = artifactIterator.next();
+		String destinationPath = artifact.getDestinationPath().replace("${bamboo.buildNumber}", getBuildNr());
+		
 		String zpk = getWorkingDir()
-				+ "/" + taskContext.getBuildContext().getArtifactContext().getSubscriptionContexts().iterator().next().getDestinationPath()
+				+ "/" + destinationPath
 				+ "/" + getZpkFileName();
 		return new File(zpk);
 	}
@@ -131,7 +172,9 @@ public class Build implements BuildEnv {
 	}
 	
 	private File getZpkFromTask() throws Exception {
-		File zpkDir = prepareDir();
+		File zpkDir = new File(getWorkingDir() + "/" + DEFAULT_ZPK_DIR);
+		zpkDir.mkdirs();
+		logger.addBuildLogEntry("Using default zpk dir [" + DEFAULT_ZPK_DIR + "]");
 		File zpk = new File(zpkDir.getAbsolutePath() + "/" + getZpkFileName());
 		return zpk;
 	}
@@ -141,8 +184,7 @@ public class Build implements BuildEnv {
 			throw new Exception("Cannot find ZPK file according to detected path [" + zpk.getAbsolutePath() + "]");
 		}
 		
-		logger.addBuildLogEntry("ZPK found: " + zpk.getAbsolutePath());
-		zpkPath = zpk.getAbsolutePath();
+		logger.addBuildLogEntry("File found: " + zpk.getAbsolutePath());
 		return zpk.getAbsolutePath();
 	}
 }

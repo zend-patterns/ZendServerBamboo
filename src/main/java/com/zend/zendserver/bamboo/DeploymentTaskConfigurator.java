@@ -23,6 +23,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", params.getString("zsversion"));
         context.put("userparams", params.getString("userparams"));
         context.put("customzpk", params.getString("customzpk"));
+        context.put("buildnr", params.getString("buildnr"));
         
         return context;
     }
@@ -39,6 +40,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", "6.3");
         context.put("userparams", "");
         context.put("customzpk", "");
+        context.put("buildnr", "${bamboo.buildNumber}");
     }
 
     public void populateContextForEdit(final Map<String, Object> context, final TaskDefinition taskDefinition)
@@ -53,6 +55,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
         context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
+        context.put("buildnr", taskDefinition.getConfiguration().get("buildnr"));
     }
 
     public void populateContextForView(final Map<String, Object> context, final TaskDefinition taskDefinition)
@@ -67,6 +70,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
         context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
+        context.put("buildnr", taskDefinition.getConfiguration().get("buildnr"));
     }
 
     public void validate(final ActionParametersMap params, final ErrorCollection errorCollection)

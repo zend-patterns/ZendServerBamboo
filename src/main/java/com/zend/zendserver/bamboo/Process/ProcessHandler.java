@@ -84,7 +84,7 @@ public class ProcessHandler {
 		filename.append(buildEnv.getWorkingDir());
 		filename.append("/");
 		filename.append(process.getOutputFilePrefix());
-		filename.append(buildEnv.getVersion());
+		filename.append(buildEnv.getBuildNr());
 
 		filename.append(process.getOutputFileSuffix());
 		File dir = new File(new File(filename.toString()).getParent());
