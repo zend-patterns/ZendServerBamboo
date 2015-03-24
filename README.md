@@ -20,6 +20,7 @@ Zend Server Bamboo plugin contains one Zend Server Capability and four Task type
   - Zend Server Packaging Task
   - Zend Server Deployment Task
   - Zend Server Deployment Check Task
+
 Of course, QA tasks like for PHPUnit support can be added accordingly.
 
 Zend Server Capability
@@ -68,10 +69,26 @@ The Zend Server Rollback Task is rolling back an application to the previous ver
 
 In general the same configuration settings as for the 'Zend Server Deployment Task' have to be provided. Additionally one has to specify how often the status of the rollback should be checked and how much time should be waited between these checks. If this is not enough time for a rollback to finish or the rollback is failing, the Task will be marked as failed.
 
-Shared Artifacts
+Packages and Shared Artifacts
 ----------------
-If the ZPK files built in  Zend Server Packaging Task should be reused for  Deployments to other systems, the ZPK files can be marked as [Shared Artifacts]. 
-ZPK files are stored in the zpk sub-directory of the working directory. In order to configure this as shared artifacts, the Location has to be set to 'zpk' and the Copy pattern is '**/*.zpk'.
+In order to deploy a (ZPK) package to a Zend Server instance, you have to make sure, that there is a ZPK file available for the Deployment Task. This can be achieved in several ways.
+### Packaging Task and Deployment Task in one stage
+In this (unusual) setup no specific configuration is necessary. The Packaging Task creates a file called <buildNr>.zpk and stores it in <workingDir>/zpk . This file is automatically detected by the Deployment Task and is being used for deploying to a Zend Server instance.
+### Custom ZPK name
+The Packaging Task and the Deployment Task can be configured to use a custom zpk file name. Relative paths to the working dir and absolute paths are supported. Variable "${bamboo.buildNumber}" can be used as part of the filename. It will be replaced with the current Bamboo build number.
+The ability to specify a custom zpk path makes Packing and Deployment Task independent from each other (Task Types can live in completely independent stages and even plans), but of course the maintainer of the Bamboo setup has to take care that the zpk created by a Packaging Task (or any other mechanism) can be found by the Deployment Task. 
+Directories specified in the custom zpk filname are created automatically if necessary - and possible regarding file permissions.
+### Shared Artifacts
+#### Artifact Definition
+A stage containing a Packaging Task can be configured to provide an Artifact (see [Shared Artifacts]) to other stages and to the Deployment phase. An example setup can look like this:
+  - Name: ZPK
+  - Location: app-zpk/${bamboo.buildNumber}
+  - Copy-Pattern: ${bamboo.buildNumber}.zpk
+
+With this setup, the Packaging task creates for each build a new directory in <workingDir>/app-zpk and stores the created zpk file.
+It's not necessary to create a new folder for each build, but at least the zpk filename should be unique accoring to the build number.
+#### Artifact Dependeny
+In order to use an artifact defined in a Packaging Task, one has to define an Artifact Dependency in the appropriate stage. Here, the Artifact Definition can be simply chosen by name. The Deployment Task will automatically fetch the location and the copy pattern of the zpk file. For the Deployment phase this is the recommended way.
 
 Zend Server Statistics Task
 ---------------------------
