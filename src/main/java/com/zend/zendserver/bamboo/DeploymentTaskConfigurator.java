@@ -22,6 +22,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", params.getString("app_name"));
         context.put("zsversion", params.getString("zsversion"));
         context.put("userparams", params.getString("userparams"));
+        context.put("custom_options", params.getString("custom_options"));
         context.put("customzpk", params.getString("customzpk"));
         context.put("buildnr", params.getString("buildnr"));
         
@@ -39,6 +40,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", "myApp");
         context.put("zsversion", "6.3");
         context.put("userparams", "");
+        context.put("custom_options", "");
         context.put("customzpk", "");
         context.put("buildnr", "${bamboo.buildNumber}");
     }
@@ -54,6 +56,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
+        context.put("custom_options", taskDefinition.getConfiguration().get("custom_options"));
         context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
         context.put("buildnr", taskDefinition.getConfiguration().get("buildnr"));
     }
@@ -69,6 +72,7 @@ public class DeploymentTaskConfigurator extends AbstractTaskConfigurator {
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
         context.put("userparams", taskDefinition.getConfiguration().get("userparams"));
+        context.put("custom_options", taskDefinition.getConfiguration().get("custom_options"));
         context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
         context.put("buildnr", taskDefinition.getConfiguration().get("buildnr"));
     }

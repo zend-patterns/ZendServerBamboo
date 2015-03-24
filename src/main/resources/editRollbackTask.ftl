@@ -3,6 +3,8 @@
 [@ww.textfield labelKey="API Secret" name="api_secret" required='true'/]
 [@ww.textfield labelKey="Application Base URL" name="base_url" required='true'/]
 [@ww.textfield labelKey="Application Name" name="app_name" required='true'/]
-[@ww.textfield labelKey="Zend Server Version" name="zsversion" required='true'/]
+[@ww.textfield labelKey="Zend Server Version" name="zsversion" required='false'/]
+[@ww.textfield labelKey="Custom zs-client options" name="custom_options" required='false'/]
+<small>Custom command line options for the zs-client, please find details in the README of https://github.com/zend-patterns/ZendServerSDK</small>
 [@ww.textfield labelKey="Amount of retries for status check" name="retry" required='true'/]
 [@ww.textfield labelKey="Wait time (sec) between retry iterations" name="waittime" required='true'/]

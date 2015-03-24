@@ -26,6 +26,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", params.getString("base_url"));
         context.put("app_name", params.getString("app_name"));
         context.put("zsversion", params.getString("zsversion"));
+        context.put("custom_options", params.getString("custom_options"));
         context.put("retry", params.getString("retry"));
         context.put("waittime", params.getString("waittime"));
         
@@ -42,6 +43,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", "");
         context.put("app_name", "myApp");
         context.put("zsversion", "6.3");
+        context.put("custom_options", "");
         context.put("retry", "3");
         context.put("waittime", "10");
     }
@@ -56,6 +58,7 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
         context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
+        context.put("custom_options", taskDefinition.getConfiguration().get("custom_options"));
         context.put("retry", taskDefinition.getConfiguration().get("retry"));
         context.put("waittime", taskDefinition.getConfiguration().get("waittime"));
     }
@@ -69,6 +72,8 @@ public class RollbackTaskConfigurator extends AbstractTaskConfigurator {
         context.put("api_secret", taskDefinition.getConfiguration().get("api_secret"));
         context.put("base_url", taskDefinition.getConfiguration().get("base_url"));
         context.put("app_name", taskDefinition.getConfiguration().get("app_name"));
+        context.put("zsversion", taskDefinition.getConfiguration().get("zsversion"));
+        context.put("custom_options", taskDefinition.getConfiguration().get("custom_options"));
         context.put("retry", taskDefinition.getConfiguration().get("retry"));
         context.put("waittime", taskDefinition.getConfiguration().get("waittime"));
     }

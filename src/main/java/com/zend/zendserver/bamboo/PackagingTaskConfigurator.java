@@ -15,6 +15,7 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         final Map<String, String> context = super.generateTaskConfigMap(params, previousTaskDefinition);
 
+        context.put("custom_options", params.getString("custom_options"));
         context.put("customzpk", params.getString("customzpk"));
         
         return context;
@@ -24,6 +25,7 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForCreate(context);
         
+        context.put("custom_options", "");
         context.put("customzpk", "");
     }
 
@@ -31,6 +33,7 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForEdit(context, taskDefinition);
         
+        context.put("custom_options", taskDefinition.getConfiguration().get("custom_options"));
         context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
     }
 
@@ -38,6 +41,7 @@ public class PackagingTaskConfigurator extends AbstractTaskConfigurator {
     {
         super.populateContextForView(context, taskDefinition);
         
+        context.put("custom_options", taskDefinition.getConfiguration().get("custom_options"));
         context.put("customzpk", taskDefinition.getConfiguration().get("customzpk"));
     }
 
