@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zend.zendserver.bamboo.plugin</groupId>
     <artifactId>zendserver</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <organization>
         <name>Zend Technologies</name>
         <url>http://www.zend.com/</url>
@@ -14,7 +14,7 @@
     <properties>
         <bamboo.version>5.3</bamboo.version>
         <bamboo.data.version>3.2.2</bamboo.data.version>
-        <amps.version>5.0.11</amps.version>
+        <amps.version>5.0.13</amps.version>
         <plugin.testrunner.version>1.1.2</plugin.testrunner.version>
         <maven-compiler-plugin.version>4.2.18</maven-compiler-plugin.version>
     </properties>
@@ -72,5 +72,5 @@
         </plugins>
         <pluginManagement/>
     </build>
-    <!--packaging>atlassian-plugin</packaging-->
+    <packaging>atlassian-plugin</packaging>
 </project>
