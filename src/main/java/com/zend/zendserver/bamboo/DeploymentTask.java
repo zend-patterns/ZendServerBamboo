@@ -44,6 +44,7 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 	}
 
 	public TaskResult execute(TaskContext taskContext) throws TaskException {
+		
 		Build build = new Build(taskContext);
 		init(taskContext, build);
 				
@@ -95,6 +96,11 @@ public class DeploymentTask extends BaseTask implements TaskType, CommonTaskType
 			builder.failed();
 		}
 		
-		return builder.checkReturnCode(deployment.getExternalProcess()).build();
+		if (deployment.hasFailed()) {
+			return builder.failedWithError().build();
+		}
+		else {
+			return builder.checkReturnCode(deployment.getExternalProcess()).build();
+		}
 	}
 }

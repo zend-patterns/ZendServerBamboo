@@ -28,7 +28,12 @@ public class PackagingTask extends BaseTask implements TaskType {
 		ProcessHandler packaging = processHandlerService.packaging();
 		packaging.execute();
 		
-		return builder.checkReturnCode(packaging.getExternalProcess()).build();
+		if (packaging.hasFailed()) {
+			return builder.failedWithError().build();
+		}
+		else {
+			return builder.checkReturnCode(packaging.getExternalProcess()).build();
+		}
 	}
 
 }

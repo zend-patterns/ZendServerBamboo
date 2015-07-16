@@ -1,7 +1,10 @@
 package com.zend.zendserver.bamboo.Process;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.bamboo.configuration.ConfigurationMap;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
@@ -29,14 +32,18 @@ public class ApplicationGetDetailsProcess implements Process {
 	}
 	
 	public List<String> getCommandList() throws Exception {
-		List<String> commandList = Arrays.asList(
+		List<String> commandList = new LinkedList<String>(Arrays.asList(
 				executableHelper.getExecutable(),
 				"applicationGetDetails",
 				"--application=" + applicationId,
 				"--zsurl=" + configMap.get("zs_url"),
 				"--zskey=" + configMap.get("api_key"),
         		"--zssecret=" + configMap.get("api_secret"),
-        		"--zsversion=" + configMap.get("zsversion"));
+        		"--zsversion=" + configMap.get("zsversion")));
+		
+		if (!StringUtils.isEmpty(configMap.get("custom_options"))) {
+			commandList.add(configMap.get("custom_options"));
+		}
 		
 		return commandList;
 	}

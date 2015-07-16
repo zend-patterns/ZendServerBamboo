@@ -4,5 +4,6 @@
 [@ww.label labelKey="Application Base URL" name="base_url"/]
 [@ww.label labelKey="Application Name" name="app_name"/]
 [@ww.label labelKey="Zend Server Version" name="zsversion"/]
+[@ww.label labelKey="Custom zs-client options" name="custom_options"/]
 [@ww.label labelKey="Amount of retries for status check" name="retry"/]
 [@ww.label labelKey="Wait time (sec) between retry iterations" name="waittime"/]

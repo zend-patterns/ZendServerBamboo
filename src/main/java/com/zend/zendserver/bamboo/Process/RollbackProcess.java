@@ -3,6 +3,8 @@ package com.zend.zendserver.bamboo.Process;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.atlassian.bamboo.configuration.ConfigurationMap;
 import com.zend.zendserver.bamboo.Env.BuildEnv;
 
@@ -36,6 +38,10 @@ public class RollbackProcess implements Process {
 				"--zskey=" + configMap.get("api_key"),
         		"--zssecret=" + configMap.get("api_secret"),
         		"--zsversion=" + configMap.get("zsversion"));
+		
+		if (!StringUtils.isEmpty(configMap.get("custom_options"))) {
+			commandList.add(" " + configMap.get("custom_options"));
+		}
 		
 		return commandList;
 	}

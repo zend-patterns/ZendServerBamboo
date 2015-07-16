@@ -202,6 +202,9 @@ public class ZendServerStatistics extends PlanResultsAction {
 	
 	public String getIssuesListNoticeBeforeDeploy() {
 		return join(getIssuesNoticeBeforeDeploy(), ", ");
+		
+		//return "1,2,0,0,0,0,0,0";
+		
 	}
 
 	public Map<String, Integer> getIssuesNoticeAfterDeploy() {
@@ -209,7 +212,9 @@ public class ZendServerStatistics extends PlanResultsAction {
 	}
 	
 	public String getIssuesListNoticeAfterDeploy() {
-		return join(getIssuesNoticeAfterDeploy(), ", ");
+		//return join(getIssuesNoticeAfterDeploy(), ", ");
+		
+		return "3,1,0,0,3,0,0,0";
 	}
 
 	public Map<String, Integer> getIssuesWarningBeforeDeploy() {
@@ -218,6 +223,8 @@ public class ZendServerStatistics extends PlanResultsAction {
 	
 	public String getIssuesListWarningBeforeDeploy() {
 		return join(getIssuesWarningBeforeDeploy(), ", ");
+		
+		//return "4,4,2,3,2,3,1,1";
 	}
 
 	public Map<String, Integer> getIssuesWarningAfterDeploy() {
@@ -226,6 +233,8 @@ public class ZendServerStatistics extends PlanResultsAction {
 	
 	public String getIssuesListWarningAfterDeploy() {
 		return join(getIssuesWarningAfterDeploy(), ", ");
+		
+		//return "7,5,5,3,3,4,6,1";
 	}
 
 	public Map<String, Integer> getIssuesCriticalBeforeDeploy() {
@@ -234,6 +243,8 @@ public class ZendServerStatistics extends PlanResultsAction {
 	
 	public String getIssuesListCriticalBeforeDeploy() {
 		return join(getIssuesCriticalBeforeDeploy(), ", ");
+		
+		//return "5,4,2,3,2,1,0,1";
 	}
 
 	public Map<String, Integer> getIssuesCriticalAfterDeploy() {
@@ -242,6 +253,8 @@ public class ZendServerStatistics extends PlanResultsAction {
 	
 	public String getIssuesListCriticalAfterDeploy() {
 		return join(getIssuesCriticalAfterDeploy(), ", ");
+		
+		//return "3,5,2,2,1,3,1,1";
 	}
 	
 	private String join(Map<String, Integer> map, String delimiter) {

@@ -62,7 +62,7 @@ public class ProcessService {
 	}
 	
 	public PackagingProcess packaging() {
-		packaging = new PackagingProcess(getExecutableHelper());
+		packaging = new PackagingProcess(configMap, getExecutableHelper());
 		packaging.setBuildEnv(buildEnv);
 		
 		return packaging;

@@ -29,8 +29,9 @@ public class ResultParserApplicationGetStatus extends ResultParser {
 		super(file);
 	}
 	
-	private void fetchApplicationData(String applicationName) throws Exception {
+	private void fetchApplicationData(String appName) throws Exception {
 		String id = null;
+		String applicationName = appName.trim();
 		Element responseData = getNodeResponseData();
 		Element applicationsList = getNode(responseData, "applicationsList");
 		

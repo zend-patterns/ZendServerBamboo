@@ -5,9 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.test.TestCollectionResult;
 import com.atlassian.bamboo.build.test.TestCollectionResultBuilder;
@@ -15,17 +12,14 @@ import com.atlassian.bamboo.build.test.TestReportCollector;
 import com.atlassian.bamboo.results.tests.TestResults;
 import com.atlassian.bamboo.resultsummary.tests.TestState;
 import com.google.common.collect.Lists;
-import com.zend.zendserver.bamboo.TaskResult.ResultParserDeploymentCheck;
 import com.zend.zendserver.bamboo.TaskResult.ResultParserError;
 
 public class DeploymentReportCollector implements TestReportCollector {
 	private BuildLogger buildLogger;
-	private DeploymentTask task;
 	private ResultParserError parser;
 	
 	public DeploymentReportCollector(DeploymentTask task, BuildLogger buildLogger) {
 		this.buildLogger = buildLogger;
-		this.task = task;
 	}
 	
 	public TestCollectionResult collect(File file) throws Exception {
