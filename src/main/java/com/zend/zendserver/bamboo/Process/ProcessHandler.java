@@ -24,6 +24,8 @@ public class ProcessHandler {
 		this.buildLogger = buildLogger;
 		
 		this.processHandler = new PluggableProcessHandler();
+		
+		
     }
 	
 	public ExternalProcess getExternalProcess() {
@@ -37,6 +39,11 @@ public class ProcessHandler {
 			.env("HOMEPATH", "\\")
 			.env("HOMEDRIVE", "c:")
 			.handler(processHandler);
+		
+		long processTimeout = buildEnv.getProcessTimeout();
+		buildLogger.addBuildLogEntry("Set Process Timeout to " + processTimeout / 1000 + " sec");
+		epb.executionTimeout(processTimeout);
+		epb.idleTimeout(processTimeout);
 		return epb;
 	}
 	
