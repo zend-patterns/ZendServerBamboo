@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.task.CommonTaskContext;
 import com.atlassian.bamboo.task.TaskDefinition;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 
 public class Deploy implements BuildEnv {
 	public static final String ARTIFACT_DOWNLOADER_KEY = "com.atlassian.bamboo.plugins.bamboo-artifact-downloader-plugin:artifactdownloadertask";
@@ -117,5 +118,17 @@ public class Deploy implements BuildEnv {
 		logger.addBuildLogEntry("ZPK found: " + zpk.getAbsolutePath());
 		zpkPath = zpk.getAbsolutePath();
 		return zpk.getAbsolutePath();
+	}
+	
+	public long getProcessTimeout() {
+		long processTimeout;
+		try {
+			VariableDefinitionContext processTimeoutContext = taskContext.getCommonContext().getVariableContext().getDefinitions().get("processTimeout");
+			processTimeout = Long.parseLong(processTimeoutContext.getValue()) * 1000;
+		}
+		catch (Exception e) {
+			processTimeout = 60 * 1000;
+		}
+		return processTimeout;
 	}
 }

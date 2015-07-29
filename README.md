@@ -100,3 +100,12 @@ The Zend Server Statistics Graph gives you event related data from Zend Server t
 [Package Structure]:http://files.zend.com/help/Zend-Server/zend-server.htm#understanding_the_package_structure.htm
 [Configuring Tasks]:https://confluence.atlassian.com/display/BAMBOO/Configuring+tasks
 [Shared Artifacts]:https://confluence.atlassian.com/display/BAMBOO/Bamboo+Best+Practice+-+Sharing+artifacts
+
+Troubleshooting
+---------------
+## Process Timeout
+If you run into a timeout problem that the process of creating the ZPK or for deploying the app to the server takes more than 60 seconds (default value), you can specify a processTimeout variable in the Build section or in the Deploy section.
+For the Build section you can find a 'Variable' tab in the plan configuration.
+For the Deploy section you can find a button "Variables" in the environment seettings.
+The variable name has to be `processTimeout`, the value has to be an **integer** (unit is **seconds**) according to your needs.
+That means that you are able to set the timeout per Plan resp. Deploy but not on a Task level.

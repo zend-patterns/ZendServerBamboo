@@ -11,6 +11,7 @@ import com.atlassian.bamboo.plan.artifact.ArtifactDefinitionContext;
 import com.atlassian.bamboo.plan.artifact.ArtifactSubscriptionContext;
 import com.atlassian.bamboo.task.TaskContext;
 import com.atlassian.bamboo.task.TaskDefinition;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 
 public class Build implements BuildEnv {
 	public static final String DEFAULT_ZPK_DIR = "/zpk";
@@ -186,5 +187,19 @@ public class Build implements BuildEnv {
 		
 		logger.addBuildLogEntry("File found: " + zpk.getAbsolutePath());
 		return zpk.getAbsolutePath();
+	}
+	
+	public long getProcessTimeout() {
+		long processTimeout;
+		try {
+			VariableDefinitionContext processTimeoutContext = taskContext.getBuildContext().getVariableContext().getDefinitions().get("processTimeout");
+			processTimeout = Long.parseLong(processTimeoutContext.getValue()) * 1000;
+		}
+		catch (Exception e) {
+			processTimeout = 60 * 1000;
+		}
+		return processTimeout;
+		
+		
 	}
 }

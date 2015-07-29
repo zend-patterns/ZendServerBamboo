@@ -7,5 +7,6 @@ public interface BuildEnv {
 	public String getZpkDir() throws Exception;
 	public String getZpkPath() throws Exception;
 	public String getZpkFileName() throws Exception;
+	public long getProcessTimeout();
 }
 
