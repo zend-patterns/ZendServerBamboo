@@ -14,7 +14,7 @@
     <properties>
         <bamboo.version>5.3</bamboo.version>
         <bamboo.data.version>3.2.2</bamboo.data.version>
-        <amps.version>5.0.13</amps.version>
+        <amps.version>5.1.18</amps.version>
         <plugin.testrunner.version>1.1.2</plugin.testrunner.version>
         <maven-compiler-plugin.version>4.2.18</maven-compiler-plugin.version>
     </properties>
@@ -60,7 +60,7 @@
                 <configuration>
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
-                     <enableFastdev>true</enableFastdev>
+                    <enableFastdev>true</enableFastdev>
                 </configuration>
             </plugin>
             <plugin>
