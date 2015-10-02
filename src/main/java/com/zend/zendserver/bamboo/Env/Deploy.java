@@ -2,6 +2,8 @@ package com.zend.zendserver.bamboo.Env;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -27,7 +29,12 @@ public class Deploy implements BuildEnv {
 	}
 	
 	public String getBuildNr() {
-        return taskContext.getConfigurationMap().get("buildnr");
+		Map<String,VariableDefinitionContext> definitions = taskContext.getCommonContext().getVariableContext().getDefinitions();
+		
+		String buildNumber = definitions.get("buildNumber").getValue();
+		logger.addBuildLogEntry("buildNumber found: " + buildNumber);
+		
+		return buildNumber;
 	}
 	
 	public String getVersion() {
